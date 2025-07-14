@@ -7,42 +7,12 @@
     <meta name="description" content="Compress PDF files online for free. Reduce PDF size without losing quality. Fast, secure, and no installation required.">
     <meta name="keywords" content="PDF compressor, reduce PDF size, shrink PDF, optimize PDF, free PDF tool">
     
-    <!-- Schema.org for SEO -->
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "WebApplication",
-      "name": "PDF Compressor Pro",
-      "url": "https://pdfcompressorpro.com",
-      "description": "Free online tool to compress PDF files and reduce file size while maintaining quality.",
-      "applicationCategory": "Utility",
-      "operatingSystem": "Web",
-      "offers": {
-        "@type": "Offer",
-        "price": "0",
-        "priceCurrency": "USD"
-      }
-    }
-    </script>
-    
-    <!-- Favicon -->
-    <link rel="icon" href="favicon.ico" type="image/x-icon">
-    
     <!-- Fonts & Icons -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- Google Ads -->
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-YOUR_ADSENSE_ID" crossorigin="anonymous"></script>
-    
-    <!-- Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-YOUR_ANALYTICS_ID"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-YOUR_ANALYTICS_ID');
-    </script>
+    <!-- PDF-LIB for actual PDF compression -->
+    <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
     
     <style>
         :root {
@@ -371,12 +341,6 @@
             color: var(--gray);
         }
 
-        /* Ad Container */
-        .ad-container {
-            margin: 40px auto;
-            text-align: center;
-        }
-
         /* Features Section */
         .features {
             display: grid;
@@ -597,19 +561,6 @@
                 </div>
             </section>
 
-            <!-- Google AdSense -->
-            <div class="ad-container">
-                <ins class="adsbygoogle"
-                     style="display:block"
-                     data-ad-client="ca-pub-YOUR_ADSENSE_ID"
-                     data-ad-slot="YOUR_AD_SLOT"
-                     data-ad-format="auto"
-                     data-full-width-responsive="true"></ins>
-                <script>
-                     (adsbygoogle = window.adsbygoogle || []).push({});
-                </script>
-            </div>
-
             <!-- Features Section -->
             <section id="features">
                 <h2 style="text-align: center; margin-bottom: 40px;">Why Choose Our PDF Compressor?</h2>
@@ -692,6 +643,7 @@
             const fileSize = document.getElementById('fileSize');
             
             let selectedFile = null;
+            let pdfBytes = null;
 
             // Drag and Drop Events
             ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
@@ -734,7 +686,7 @@
                 handleFiles(this.files);
             });
 
-            function handleFiles(files) {
+            async function handleFiles(files) {
                 if (files.length === 0) return;
                 
                 const file = files[0];
@@ -752,17 +704,13 @@
                 }
                 
                 selectedFile = file;
+                
+                // Read the PDF file
+                const arrayBuffer = await file.arrayBuffer();
+                pdfBytes = new Uint8Array(arrayBuffer);
+                
                 updatePreview(file);
                 compressBtn.disabled = false;
-                
-                // Track file upload in analytics
-                if (typeof gtag !== 'undefined') {
-                    gtag('event', 'file_upload', {
-                        'event_category': 'engagement',
-                        'event_label': 'pdf_upload',
-                        'value': file.size / (1024 * 1024) // Size in MB
-                    });
-                }
             }
 
             // Update Preview
@@ -786,6 +734,7 @@
             // Reset Button
             resetBtn.addEventListener('click', function() {
                 selectedFile = null;
+                pdfBytes = null;
                 fileInput.value = '';
                 previewContainer.style.display = 'none';
                 compressBtn.disabled = true;
@@ -793,7 +742,7 @@
 
             // Compression Button
             compressBtn.addEventListener('click', async function() {
-                if (!selectedFile) return;
+                if (!selectedFile || !pdfBytes) return;
                 
                 const compressionLevel = document.querySelector('input[name="compression"]:checked').value;
                 
@@ -802,32 +751,62 @@
                 compressBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Compressing...';
                 
                 try {
-                    // Simulate compression (in a real app, you'd use a PDF compression library)
-                    await new Promise(resolve => setTimeout(resolve, 2000));
+                    const { PDFDocument } = PDFLib;
                     
-                    // Create download link
-                    const url = URL.createObjectURL(new Blob(['Compressed PDF content'], { type: 'application/pdf' }));
+                    // Load the PDF document
+                    const pdfDoc = await PDFDocument.load(pdfBytes);
+                    
+                    // Set compression options
+                    const saveOptions = {
+                        useObjectStreams: true,
+                        useCompression: true
+                    };
+
+                    // Apply compression settings based on level
+                    switch(compressionLevel) {
+                        case 'low':
+                            // Minimal compression - faster but larger files
+                            saveOptions.downsampleImages = false;
+                            break;
+                        case 'medium':
+                            // Balanced compression
+                            saveOptions.downsampleImages = true;
+                            saveOptions.downsampleImagesTo = 150;
+                            break;
+                        case 'high':
+                            // Maximum compression
+                            saveOptions.downsampleImages = true;
+                            saveOptions.downsampleImagesTo = 96;
+                            saveOptions.throwIfConversionFails = false;
+                            break;
+                    }
+
+                    // Save with compression
+                    const compressedPdfBytes = await pdfDoc.save(saveOptions);
+                    
+                    // Verify output
+                    if (compressedPdfBytes.length < 1024) {
+                        throw new Error('Compression failed - output file too small');
+                    }
+
+                    // Create download
+                    const blob = new Blob([compressedPdfBytes], { type: 'application/pdf' });
+                    const url = URL.createObjectURL(blob);
                     const a = document.createElement('a');
                     a.href = url;
-                    a.download = selectedFile.name.replace('.pdf', '-compressed.pdf');
+                    a.download = selectedFile.name.replace('.pdf', '') + '_compressed.pdf';
                     document.body.appendChild(a);
                     a.click();
                     document.body.removeChild(a);
                     
-                    // Track conversion in analytics
-                    if (typeof gtag !== 'undefined') {
-                        gtag('event', 'conversion', {
-                            'send_to': 'AW-YOUR_CONVERSION_ID/YOUR_LABEL',
-                            'value': 1,
-                            'currency': 'USD'
-                        });
-                    }
-                    
-                    // Show success message
-                    alert('PDF compressed successfully!');
+                    // Clean up
+                    setTimeout(() => {
+                        URL.revokeObjectURL(url);
+                    }, 100);
+
                 } catch (error) {
                     console.error('Compression error:', error);
-                    alert('An error occurred during compression. Please try again.');
+                    alert('Error: ' + error.message);
                 } finally {
                     // Reset button
                     compressBtn.disabled = false;
