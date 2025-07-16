@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loan EMI Calculator</title>
+    <style>
+        :root {
+            --primary: #4361ee;
+            --light-gray: #e9ecef;
+            --border-radius: 8px;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .input-group {
+            margin-bottom: 20px;
+        }
+        input[type="range"] {
+            width: 100%;
+        }
+        button {
+            padding: 12px 20px;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            width: 100%;
+        }
+        .result-cards {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .result-card {
+            padding: 15px;
+            background: var(--light-gray);
+            border-radius: var(--border-radius);
+            text-align: center;
+            flex: 1;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Loan EMI Calculator</h1>
+        
+        <div class="calculator-section">
+            <div class="input-group">
+                <label for="loan-amount">Loan Amount (₹)</label>
+                <input type="number" id="loan-amount" value="1000000">
+                <input type="range" id="loan-amount-range" min="10000" max="5000000" step="10000" value="1000000">
+            </div>
+            
+            <div class="input-group">
+                <label for="interest-rate">Interest Rate (% p.a.)</label>
+                <input type="number" id="interest-rate" value="8.5" step="0.1">
+                <input type="range" id="interest-rate-range" min="1" max="20" step="0.1" value="8.5">
+            </div>
+            
+            <div class="input-group">
+                <label for="loan-tenure">Loan Tenure (Years)</label>
+                <input type="number" id="loan-tenure" value="20">
+                <input type="range" id="loan-tenure-range" min="1" max="30" step="1" value="20">
+            </div>
+            
+            <button id="calculate-btn">Calculate EMI</button>
+        </div>
+        
+        <div class="results-section">
+            <div class="emi-amount" id="emi-amount">₹0</div>
+            
+            <div class="result-cards">
+                <div class="result-card">
+                    <div>Total Interest</div>
+                    <div id="total-interest">₹0</div>
+                </div>
+                <div class="result-card">
+                    <div>Total Payment</div>
+                    <div id="total-payment">₹0</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get DOM elements
+            const loanAmountInput = document.getElementById('loan-amount');
+            const loanAmountRange = document.getElementById('loan-amount-range');
+            const interestRateInput = document.getElementById('interest-rate');
+            const interestRateRange = document.getElementById('interest-rate-range');
+            const loanTenureInput = document.getElementById('loan-tenure');
+            const loanTenureRange = document.getElementById('loan-tenure-range');
+            const calculateBtn = document.getElementById('calculate-btn');
+            const emiAmountEl = document.getElementById('emi-amount');
+            const totalInterestEl = document.getElementById('total-interest');
+            const totalPaymentEl = document.getElementById('total-payment');
+
+            // Sync sliders with input fields
+            function syncInputWithRange(input, range) {
+                input.addEventListener('input', function() {
+                    range.value = this.value;
+                    calculateEMI();
+                });
+                range.addEventListener('input', function() {
+                    input.value = this.value;
+                    calculateEMI();
+                });
+            }
+
+            // Set up synchronization
+            syncInputWithRange(loanAmountInput, loanAmountRange);
+            syncInputWithRange(interestRateInput, interestRateRange);
+            syncInputWithRange(loanTenureInput, loanTenureRange);
+
+            // Calculate EMI function
+            function calculateEMI() {
+                const loanAmount = parseFloat(loanAmountInput.value);
+                const interestRate = parseFloat(interestRateInput.value) / 100 / 12; // Monthly rate
+                const loanTenure = parseFloat(loanTenureInput.value) * 12; // Months
+                
+                // EMI formula: [P x R x (1+R)^N]/[(1+R)^N-1]
+                const emi = (loanAmount * interestRate * Math.pow(1 + interestRate, loanTenure)) / 
+                           (Math.pow(1 + interestRate, loanTenure) - 1);
+                
+                const totalPayment = emi * loanTenure;
+                const totalInterest = totalPayment - loanAmount;
+                
+                // Update results
+                emiAmountEl.textContent = '₹' + Math.round(emi).toLocaleString();
+                totalInterestEl.textContent = '₹' + Math.round(totalInterest).toLocaleString();
+                totalPaymentEl.textContent = '₹' + Math.round(totalPayment).toLocaleString();
+            }
+
+            // Initial calculation
+            calculateEMI();
+            
+            // Calculate on button click
+            calculateBtn.addEventListener('click', calculateEMI);
+        });
+    </script>
+</body>
+</html>
