@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Free online Text Diff tool to compare differences between two text documents. Highlight changes between versions with our advanced diff checker.">
+    <meta name="keywords" content="text diff, compare text, difference checker, text comparison, online diff tool, document comparison">
+    <title>Free Online Text Diff Tool | Compare Text Differences Instantly</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #4361ee;
+            --primary-dark: #3a56d4;
+            --secondary: #3f37c9;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --gray: #6c757d;
+            --light-gray: #e9ecef;
+            --border-radius: 8px;
+            --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            color: var(--dark);
+            background-color: #f5f7ff;
+            padding: 0;
+            margin: 0;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px 0;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            color: var(--primary);
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            color: var(--gray);
+            max-width: 700px;
+            margin: 0 auto 20px;
+        }
+
+        .ad-container {
+            margin: 20px auto;
+            background-color: var(--light-gray);
+            border-radius: var(--border-radius);
+            padding: 15px;
+            text-align: center;
+            min-height: 90px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px dashed #ccc;
+        }
+
+        .ad-container.top-ad {
+            max-width: 728px;
+        }
+
+        .ad-container.side-ad {
+            width: 100%;
+            height: 600px;
+            margin: 0;
+        }
+
+        .main-content {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .text-areas {
+            flex: 1;
+            min-width: 300px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .text-area-container {
+            position: relative;
+            flex: 1;
+        }
+
+        .text-area-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        textarea {
+            width: 100%;
+            height: 250px;
+            padding: 15px;
+            border: 1px solid var(--light-gray);
+            border-radius: var(--border-radius);
+            font-family: 'Inter', sans-serif;
+            font-size: 0.95rem;
+            resize: vertical;
+            transition: var(--transition);
+            background-color: white;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(67, 97, 238, 0.2);
+        }
+
+        .controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            font-weight: 500;
+            transition: var(--transition);
+            font-family: 'Inter', sans-serif;
+            font-size: 0.95rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        button:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-1px);
+        }
+
+        button.secondary {
+            background-color: white;
+            color: var(--primary);
+            border: 1px solid var(--primary);
+        }
+
+        button.secondary:hover {
+            background-color: var(--light);
+        }
+
+        .result-container {
+            flex: 1;
+            min-width: 300px;
+        }
+
+        .result-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .diff-result {
+            background-color: white;
+            border: 1px solid var(--light-gray);
+            border-radius: var(--border-radius);
+            padding: 15px;
+            min-height: 250px;
+            max-height: 520px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.95rem;
+        }
+
+        .diff-line {
+            margin-bottom: 4px;
+            line-height: 1.5;
+            padding: 2px 5px;
+            border-radius: 3px;
+        }
+
+        .added {
+            background-color: #d1fae5;
+            color: #065f46;
+        }
+
+        .removed {
+            background-color: #fee2e2;
+            color: #991b1b;
+            text-decoration: line-through;
+        }
+
+        .unchanged {
+            color: var(--dark);
+        }
+
+        .stats {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+        }
+
+        .stat-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+
+        .stat-value {
+            font-weight: 600;
+        }
+
+        .mobile-ad {
+            display: none;
+            margin: 20px auto;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px 0;
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 1200px) {
+            .main-content {
+                flex-direction: column;
+            }
+            
+            .ad-container.side-ad {
+                display: none;
+            }
+            
+            .mobile-ad {
+                display: block;
+            }
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .subtitle {
+                font-size: 1rem;
+            }
+            
+            .controls {
+                flex-direction: column;
+            }
+            
+            button {
+                width: 100%;
+            }
+        }
+
+        /* Loading spinner */
+        .spinner {
+            display: none;
+            width: 24px;
+            height: 24px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Tooltip */
+        .tooltip {
+            position: relative;
+            display: inline-block;
+        }
+
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 200px;
+            background-color: var(--dark);
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 8px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0;
+            transition: opacity 0.3s;
+            font-size: 0.8rem;
+            font-weight: normal;
+        }
+
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Text Diff Tool</h1>
+            <p class="subtitle">Compare and find differences between two text documents. Our free online tool highlights additions, deletions, and unchanged content for easy comparison.</p>
+        </header>
+
+        <div class="ad-container top-ad">
+            <!-- Google Adsense Ad Slot -->
+            <div id="top-banner-ad">
+                <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-EXAMPLE"></script>
+                <!-- TextDiff_Top_Banner -->
+                <ins class="adsbygoogle"
+                    style="display:block"
+                    data-ad-client="ca-pub-EXAMPLE"
+                    data-ad-slot="1234567890"
+                    data-ad-format="auto"
+                    data-full-width-responsive="true"></ins>
+                <script>
+                    (adsbygoogle = window.adsbygoogle || []).push({});
+                </script>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <div class="text-areas">
+                <div class="controls">
+                    <button id="compare-btn">
+                        <span class="spinner" id="compare-spinner"></span>
+                        Compare Texts
+                    </button>
+                    <button id="clear-btn" class="secondary">Clear All</button>
+                    <button id="sample-btn" class="secondary">Load Sample</button>
+                    <div class="tooltip">
+                        <button id="swap-btn" class="secondary">↔ Swap Texts</button>
+                        <span class="tooltiptext">Swap the content between both text areas</span>
+                    </div>
+                </div>
+
+                <div class="text-area-container">
+                    <label for="text1" class="text-area-label">Original Text</label>
+                    <textarea id="text1" placeholder="Paste your original text here..."></textarea>
+                </div>
+
+                <div class="text-area-container">
+                    <label for="text2" class="text-area-label">Modified Text</label>
+                    <textarea id="text2" placeholder="Paste your modified text here..."></textarea>
+                </div>
+
+                <div class="mobile-ad ad-container">
+                    <!-- Google Adsense Mobile Ad Slot -->
+                    <div id="mobile-ad">
+                        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-EXAMPLE"></script>
+                        <!-- TextDiff_Mobile_Banner -->
+                        <ins class="adsbygoogle"
+                            style="display:block"
+                            data-ad-client="ca-pub-EXAMPLE"
+                            data-ad-slot="0987654321"
+                            data-ad-format="auto"
+                            data-full-width-responsive="true"></ins>
+                        <script>
+                            (adsbygoogle = window.adsbygoogle || []).push({});
+                        </script>
+                    </div>
+                </div>
+            </div>
+
+            <div class="ad-container side-ad">
+                <!-- Google Adsense Sidebar Ad Slot -->
+                <div id="side-ad">
+                    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-EXAMPLE"></script>
+                    <!-- TextDiff_Sidebar -->
+                    <ins class="adsbygoogle"
+                        style="display:block"
+                        data-ad-client="ca-pub-EXAMPLE"
+                        data-ad-slot="2468013579"
+                        data-ad-format="auto"
+                        data-full-width-responsive="true"></ins>
+                    <script>
+                        (adsbygoogle = window.adsbygoogle || []).push({});
+                    </script>
+                </div>
+            </div>
+
+            <div class="result-container">
+                <div class="result-header">
+                    <h2>Comparison Results</h2>
+                </div>
+                <div class="diff-result" id="diff-result">
+                    <p>Differences will appear here after comparison.</p>
+                </div>
+                
+                <div class="stats">
+                    <h3>Comparison Statistics</h3>
+                    <div class="stat-item">
+                        <span>Total Differences:</span>
+                        <span class="stat-value" id="total-diffs">0</span>
+                    </div>
+                    <div class="stat-item">
+                        <span>Added Lines:</span>
+                        <span class="stat-value" id="added-lines">0</span>
+                    </div>
+                    <div class="stat-item">
+                        <span>Removed Lines:</span>
+                        <span class="stat-value" id="removed-lines">0</span>
+                    </div>
+                    <div class="stat-item">
+                        <span>Unchanged Lines:</span>
+                        <span class="stat-value" id="unchanged-lines">0</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="ad-container top-ad" style="margin-top: 40px;">
+            <!-- Google Adsense Bottom Ad Slot -->
+            <div id="bottom-banner-ad">
+                <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-EXAMPLE"></script>
+                <!-- TextDiff_Bottom_Banner -->
+                <ins class="adsbygoogle"
+                    style="display:block"
+                    data-ad-client="ca-pub-EXAMPLE"
+                    data-ad-slot="1357924680"
+                    data-ad-format="auto"
+                    data-full-width-responsive="true"></ins>
+                <script>
+                    (adsbygoogle = window.adsbygoogle || []).push({});
+                </script>
+            </div>
+        </div>
+
+        <footer>
+            <p>© <span id="year"></span> Text Diff Tool - Free Online Text Comparison Utility</p>
+            <p>All text processing happens in your browser - your data never leaves your device.</p>
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set current year in footer
+            document.getElementById('year').textContent = new Date().getFullYear();
+            
+            // Sample text for demo
+            const sampleText1 = `The quick brown fox jumps over the lazy dog.
+This is the first paragraph of the original text.
+It contains some sample content to demonstrate the diff tool.
+You can replace this with your own text to compare.
+
+Line numbers are preserved in the comparison.
+The diff tool highlights additions and deletions.
+Try making changes to this text and see the differences!`;
+
+            const sampleText2 = `The quick brown fox jumps over the lazy dog.
+This is the first paragraph of the MODIFIED text.
+It contains some changed content to demonstrate the diff tool.
+You can replace this with your own text to compare.
+
+New line added here to show additions.
+Line numbers are preserved in the comparison.
+The diff tool highlights additions and deletions.
+Try making changes to this text and see the differences!`;
+
+            // DOM elements
+            const text1El = document.getElementById('text1');
+            const text2El = document.getElementById('text2');
+            const diffResultEl = document.getElementById('diff-result');
+            const compareBtn = document.getElementById('compare-btn');
+            const clearBtn = document.getElementById('clear-btn');
+            const sampleBtn = document.getElementById('sample-btn');
+            const swapBtn = document.getElementById('swap-btn');
+            const compareSpinner = document.getElementById('compare-spinner');
+            
+            // Stats elements
+            const totalDiffsEl = document.getElementById('total-diffs');
+            const addedLinesEl = document.getElementById('added-lines');
+            const removedLinesEl = document.getElementById('removed-lines');
+            const unchangedLinesEl = document.getElementById('unchanged-lines');
+
+            // Load sample text
+            sampleBtn.addEventListener('click', function() {
+                text1El.value = sampleText1;
+                text2El.value = sampleText2;
+            });
+
+            // Clear all text
+            clearBtn.addEventListener('click', function() {
+                text1El.value = '';
+                text2El.value = '';
+                diffResultEl.innerHTML = '<p>Differences will appear here after comparison.</p>';
+                resetStats();
+            });
+
+            // Swap texts
+            swapBtn.addEventListener('click', function() {
+                const temp = text1El.value;
+                text1El.value = text2El.value;
+                text2El.value = temp;
+            });
+
+            // Compare texts
+            compareBtn.addEventListener('click', function() {
+                compareTexts();
+            });
+
+            // Reset statistics
+            function resetStats() {
+                totalDiffsEl.textContent = '0';
+                addedLinesEl.textContent = '0';
+                removedLinesEl.textContent = '0';
+                unchangedLinesEl.textContent = '0';
+            }
+
+            // Compare texts function
+            function compareTexts() {
+                const text1 = text1El.value;
+                const text2 = text2El.value;
+                
+                if (!text1 && !text2) {
+                    diffResultEl.innerHTML = '<p>Please enter text in both boxes to compare.</p>';
+                    resetStats();
+                    return;
+                }
+                
+                // Show loading spinner
+                compareSpinner.style.display = 'inline-block';
+                compareBtn.disabled = true;
+                
+                // Use setTimeout to allow UI to update before heavy computation
+                setTimeout(function() {
+                    const diff = diffLines(text1, text2);
+                    displayDiff(diff);
+                    
+                    // Hide spinner and re-enable button
+                    compareSpinner.style.display = 'none';
+                    compareBtn.disabled = false;
+                }, 50);
+            }
+
+            // Diff algorithm (basic line-by-line comparison)
+            function diffLines(text1, text2) {
+                const lines1 = text1.split('\n');
+                const lines2 = text2.split('\n');
+                const diff = [];
+                
+                let i = 0, j = 0;
+                let addedCount = 0, removedCount = 0, unchangedCount = 0;
+                
+                while (i < lines1.length || j < lines2.length) {
+                    if (i < lines1.length && j < lines2.length && lines1[i] === lines2[j]) {
+                        diff.push({ type: 'unchanged', value: lines1[i] });
+                        unchangedCount++;
+                        i++;
+                        j++;
+                    } else {
+                        if (j < lines2.length && (i >= lines1.length || lines1[i] !== lines2[j])) {
+                            // Check if this is a modification (next line in original matches next in modified)
+                            if (i + 1 < lines1.length && j + 1 < lines2.length && lines1[i + 1] === lines2[j + 1]) {
+                                diff.push({ type: 'removed', value: lines1[i] });
+                                diff.push({ type: 'added', value: lines2[j] });
+                                removedCount++;
+                                addedCount++;
+                                i++;
+                                j++;
+                            } else {
+                                diff.push({ type: 'added', value: lines2[j] });
+                                addedCount++;
+                                j++;
+                            }
+                        } else if (i < lines1.length && (j >= lines2.length || lines1[i] !== lines2[j])) {
+                            diff.push({ type: 'removed', value: lines1[i] });
+                            removedCount++;
+                            i++;
+                        }
+                    }
+                }
+                
+                // Update statistics
+                totalDiffsEl.textContent = addedCount + removedCount;
+                addedLinesEl.textContent = addedCount;
+                removedLinesEl.textContent = removedCount;
+                unchangedLinesEl.textContent = unchangedCount;
+                
+                return diff;
+            }
+
+            // Display diff results
+            function displayDiff(diff) {
+                if (diff.length === 0) {
+                    diffResultEl.innerHTML = '<p>No differences found. The texts are identical.</p>';
+                    return;
+                }
+                
+                let html = '';
+                diff.forEach(item => {
+                    const cls = item.type === 'added' ? 'added' : 
+                                item.type === 'removed' ? 'removed' : 'unchanged';
+                    const symbol = item.type === 'added' ? '+' : 
+                                  item.type === 'removed' ? '-' : ' ';
+                    
+                    html += `<div class="diff-line ${cls}">${symbol} ${escapeHtml(item.value)}</div>`;
+                });
+                
+                diffResultEl.innerHTML = html;
+            }
+
+            // Helper function to escape HTML
+            function escapeHtml(unsafe) {
+                return unsafe
+                    .replace(/&/g, "&amp;")
+                    .replace(/</g, "&lt;")
+                    .replace(/>/g, "&gt;")
+                    .replace(/"/g, "&quot;")
+                    .replace(/'/g, "&#039;");
+            }
+
+            // Initialize with sample text if both boxes are empty
+            if (!text1El.value && !text2El.value) {
+                text1El.value = sampleText1;
+                text2El.value = sampleText2;
+            }
+        });
+    </script>
+</body>
+</html>
