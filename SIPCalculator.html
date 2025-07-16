@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Free online SIP Calculator to estimate returns on your Systematic Investment Plan. Calculate wealth creation through disciplined mutual fund investments.">
+    <meta name="keywords" content="SIP calculator, mutual fund calculator, investment calculator, systematic investment plan, wealth calculator, financial planning">
+    <title>Monthly SIP Calculator | Estimate Mutual Fund Returns Online</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #4361ee;
+            --primary-light: #e0e7ff;
+            --primary-dark: #3730a3;
+            --light: #f8fafc;
+            --light-gray: #e2e8f0;
+            --gray: #64748b;
+            --dark: #1e293b;
+            --border-radius: 12px;
+            --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            --box-shadow-hover: 0 10px 15px rgba(0, 0, 0, 0.1);
+            --transition: all 0.2s ease-in-out;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            color: var(--dark);
+            background-color: #f8fafc;
+            padding: 0;
+            margin: 0;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            color: var(--primary-dark);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            color: var(--gray);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Ad Containers */
+        .ad-container {
+            margin: 20px auto;
+            background-color: var(--light-gray);
+            border-radius: var(--border-radius);
+            padding: 15px;
+            text-align: center;
+            min-height: 90px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px dashed #ccc;
+        }
+
+        .ad-container.top-ad {
+            max-width: 728px;
+        }
+
+        .calculator-section {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            box-shadow: var(--box-shadow);
+            margin-bottom: 2rem;
+        }
+
+        .input-group {
+            margin-bottom: 1.75rem;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 0.75rem;
+            font-size: 1.1rem;
+            font-weight: 500;
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .input-group input[type="number"] {
+            width: 100%;
+            padding: 1rem;
+            font-size: 1.1rem;
+            border: 2px solid var(--light-gray);
+            border-radius: var(--border-radius);
+            transition: var(--transition);
+            margin-bottom: 0.5rem;
+        }
+
+        .input-group input[type="number"]:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px var(--primary-light);
+        }
+
+        .range-container {
+            position: relative;
+            margin-top: 0.5rem;
+        }
+
+        input[type="range"] {
+            width: 100%;
+            height: 8px;
+            -webkit-appearance: none;
+            background: var(--light-gray);
+            border-radius: 4px;
+            outline: none;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: var(--primary);
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        input[type="range"]::-webkit-slider-thumb:hover {
+            transform: scale(1.1);
+            background: var(--primary-dark);
+        }
+
+        .range-labels {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 0.5rem;
+            font-size: 0.9rem;
+            color: var(--gray);
+        }
+
+        .results-section {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            box-shadow: var(--box-shadow);
+            margin-bottom: 2rem;
+        }
+
+        .investment-result {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background: linear-gradient(135deg, #f0f4ff 0%, #e0e7ff 100%);
+            border-radius: var(--border-radius);
+        }
+
+        .investment-amount {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary-dark);
+            margin: 0.5rem 0;
+        }
+
+        .result-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .result-card {
+            padding: 1.5rem;
+            background: var(--light);
+            border-radius: var(--border-radius);
+            text-align: center;
+            transition: var(--transition);
+            box-shadow: var(--box-shadow);
+        }
+
+        .result-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--box-shadow-hover);
+        }
+
+        .result-card .label {
+            font-size: 0.95rem;
+            color: var(--gray);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .result-card .value {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .yearly-growth {
+            margin-top: 2rem;
+        }
+
+        .yearly-growth h2 {
+            font-size: 1.5rem;
+            color: var(--primary-dark);
+            margin-bottom: 1.5rem;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+        }
+
+        .growth-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+            box-shadow: var(--box-shadow);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+        }
+
+        .growth-table th {
+            background-color: var(--primary);
+            color: white;
+            padding: 1rem;
+            text-align: left;
+            font-weight: 500;
+        }
+
+        .growth-table td {
+            padding: 1rem;
+            border-bottom: 1px solid var(--light-gray);
+        }
+
+        .growth-table tr:nth-child(even) {
+            background-color: var(--light);
+        }
+
+        .growth-table tr:hover {
+            background-color: var(--primary-light);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 1rem;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .calculator-section,
+            .results-section {
+                padding: 1.5rem;
+            }
+            
+            .investment-amount {
+                font-size: 2rem;
+            }
+            
+            .result-card .value {
+                font-size: 1.25rem;
+            }
+            
+            .growth-table th,
+            .growth-table td {
+                padding: 0.75rem;
+                font-size: 0.9rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 1.75rem;
+            }
+            
+            .result-cards {
+                grid-template-columns: 1fr;
+            }
+            
+            .growth-table {
+                display: block;
+                overflow-x: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-chart-line"></i> Monthly SIP Calculator</h1>
+            <p class="subtitle">Estimate potential returns from your Systematic Investment Plan (SIP) in mutual funds</p>
+        </header>
+
+        <!-- Top Ad Banner -->
+        <div class="ad-container top-ad">
+            <!-- Google Adsense Ad Slot -->
+            <div id="top-banner-ad">
+                <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-EXAMPLE"></script>
+                <!-- SIP_Top_Banner -->
+                <ins class="adsbygoogle"
+                    style="display:block"
+                    data-ad-client="ca-pub-EXAMPLE"
+                    data-ad-slot="1234567890"
+                    data-ad-format="auto"
+                    data-full-width-responsive="true"></ins>
+                <script>
+                    (adsbygoogle = window.adsbygoogle || []).push({});
+                </script>
+            </div>
+        </div>
+
+        <div class="calculator-section">
+            <div class="input-group">
+                <label for="monthly-investment"><i class="fas fa-rupee-sign"></i> Monthly Investment (₹)</label>
+                <input type="number" id="monthly-investment" placeholder="E.g. 5000" value="10000">
+                <div class="range-container">
+                    <input type="range" id="monthly-investment-range" min="500" max="100000" step="500" value="10000">
+                    <div class="range-labels">
+                        <span>₹500</span>
+                        <span>₹1L</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="input-group">
+                <label for="expected-return"><i class="fas fa-percentage"></i> Expected Rate of Return (% p.a.)</label>
+                <input type="number" id="expected-return" placeholder="E.g. 12" value="12" step="0.1">
+                <div class="range-container">
+                    <input type="range" id="expected-return-range" min="1" max="30" step="0.1" value="12">
+                    <div class="range-labels">
+                        <span>1%</span>
+                        <span>30%</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="input-group">
+                <label for="investment-period"><i class="fas fa-calendar-alt"></i> Investment Period (Years)</label>
+                <input type="number" id="investment-period" placeholder="E.g. 10" value="10">
+                <div class="range-container">
+                    <input type="range" id="investment-period-range" min="1" max="30" step="1" value="10">
+                    <div class="range-labels">
+                        <span>1 Year</span>
+                        <span>30 Years</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="results-section">
+            <div class="investment-result">
+                <div class="label"><i class="fas fa-wallet"></i> Estimated Future Value</div>
+                <div class="investment-amount" id="future-value">₹0</div>
+                <div class="label" id="investment-description">For ₹10,000 monthly at 12% return over 10 years</div>
+            </div>
+            
+            <div class="result-cards">
+                <div class="result-card">
+                    <div class="label"><i class="fas fa-money-bill-wave"></i> Total Invested</div>
+                    <div class="value" id="total-invested">₹0</div>
+                </div>
+                <div class="result-card">
+                    <div class="label"><i class="fas fa-coins"></i> Wealth Gained</div>
+                    <div class="value" id="wealth-gained">₹0</div>
+                </div>
+            </div>
+            
+            <div class="yearly-growth">
+                <h2><i class="fas fa-chart-bar"></i> Yearly Growth Summary</h2>
+                <div class="table-container">
+                    <table class="growth-table" id="yearly-growth">
+                        <thead>
+                            <tr>
+                                <th>Year</th>
+                                <th>Invested</th>
+                                <th>Returns</th>
+                                <th>Total Value</th>
+                            </tr>
+                        </thead>
+                        <tbody id="yearly-growth-body">
+                            <!-- Will be populated by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bottom Ad Banner -->
+        <div class="ad-container top-ad" style="margin-top: 2rem;">
+            <!-- Google Adsense Bottom Ad Slot -->
+            <div id="bottom-banner-ad">
+                <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-EXAMPLE"></script>
+                <!-- SIP_Bottom_Banner -->
+                <ins class="adsbygoogle"
+                    style="display:block"
+                    data-ad-client="ca-pub-EXAMPLE"
+                    data-ad-slot="1357924680"
+                    data-ad-format="auto"
+                    data-full-width-responsive="true"></ins>
+                <script>
+                    (adsbygoogle = window.adsbygoogle || []).push({});
+                </script>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get DOM elements
+            const monthlyInvestmentInput = document.getElementById('monthly-investment');
+            const monthlyInvestmentRange = document.getElementById('monthly-investment-range');
+            const expectedReturnInput = document.getElementById('expected-return');
+            const expectedReturnRange = document.getElementById('expected-return-range');
+            const investmentPeriodInput = document.getElementById('investment-period');
+            const investmentPeriodRange = document.getElementById('investment-period-range');
+            const futureValueEl = document.getElementById('future-value');
+            const totalInvestedEl = document.getElementById('total-invested');
+            const wealthGainedEl = document.getElementById('wealth-gained');
+            const investmentDescriptionEl = document.getElementById('investment-description');
+            const yearlyGrowthBody = document.getElementById('yearly-growth-body');
+
+            // Format currency
+            function formatCurrency(amount) {
+                return '₹' + Math.round(amount).toLocaleString('en-IN');
+            }
+
+            // Calculate compound interest for SIP
+            function calculateSIP(monthlyInvestment, annualRate, years) {
+                const months = years * 12;
+                const monthlyRate = annualRate / 100 / 12;
+                let futureValue = 0;
+                
+                // SIP future value formula: P * [( (1 + r)^n - 1 ) / r ] * (1 + r)
+                futureValue = monthlyInvestment * 
+                             ( (Math.pow(1 + monthlyRate, months) - 1 ) / monthlyRate ) * 
+                             (1 + monthlyRate);
+                
+                return futureValue;
+            }
+
+            // Generate yearly growth table
+            function generateYearlyGrowth(monthlyInvestment, annualRate, years) {
+                let yearlyRows = '';
+                let totalInvested = 0;
+                let totalValue = 0;
+                const monthlyRate = annualRate / 100 / 12;
+                
+                for (let year = 1; year <= years; year++) {
+                    const months = year * 12;
+                    let yearlyInvestment = monthlyInvestment * 12;
+                    totalInvested += yearlyInvestment;
+                    
+                    // Calculate year-end value
+                    let yearEndValue = 0;
+                    for (let month = 1; month <= months; month++) {
+                        yearEndValue = (yearEndValue + monthlyInvestment) * (1 + monthlyRate);
+                    }
+                    
+                    const returns = yearEndValue - totalInvested;
+                    yearlyRows += `
+                        <tr>
+                            <td>${year}</td>
+                            <td>${formatCurrency(totalInvested)}</td>
+                            <td>${formatCurrency(returns)}</td>
+                            <td>${formatCurrency(yearEndValue)}</td>
+                        </tr>
+                    `;
+                    
+                    totalValue = yearEndValue;
+                }
+                
+                return {
+                    rows: yearlyRows,
+                    totalInvested: totalInvested,
+                    futureValue: totalValue,
+                    wealthGained: totalValue - totalInvested
+                };
+            }
+
+            // Sync input and range elements
+            function setupSync(input, range) {
+                // Update input when slider changes
+                range.addEventListener('input', function() {
+                    input.value = this.value;
+                    calculateSIPResults();
+                });
+                
+                // Update slider when input changes
+                input.addEventListener('input', function() {
+                    range.value = this.value;
+                    calculateSIPResults();
+                });
+            }
+
+            // Set up synchronization for all sliders
+            setupSync(monthlyInvestmentInput, monthlyInvestmentRange);
+            setupSync(expectedReturnInput, expectedReturnRange);
+            setupSync(investmentPeriodInput, investmentPeriodRange);
+
+            // Calculate SIP results
+            function calculateSIPResults() {
+                const monthlyInvestment = parseFloat(monthlyInvestmentInput.value) || 0;
+                const expectedReturn = parseFloat(expectedReturnInput.value) || 0;
+                const investmentPeriod = parseFloat(investmentPeriodInput.value) || 0;
+                
+                // Calculate results
+                const result = generateYearlyGrowth(monthlyInvestment, expectedReturn, investmentPeriod);
+                
+                // Update results
+                futureValueEl.textContent = formatCurrency(result.futureValue);
+                totalInvestedEl.textContent = formatCurrency(result.totalInvested);
+                wealthGainedEl.textContent = formatCurrency(result.wealthGained);
+                
+                investmentDescriptionEl.textContent = 
+                    `For ${formatCurrency(monthlyInvestment)} monthly at ${expectedReturn}% return over ${investmentPeriod} years`;
+                
+                // Update yearly growth table
+                yearlyGrowthBody.innerHTML = result.rows;
+            }
+
+            // Initial calculation
+            calculateSIPResults();
+        });
+    </script>
+</body>
+</html>
