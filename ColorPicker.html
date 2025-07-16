@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Free online Color Picker & HEX/RGB Converter tool. Easily pick colors, convert between HEX and RGB, and get color codes instantly.">
+    <meta name="keywords" content="color picker, HEX to RGB, RGB to HEX, color converter, online color tool, web design tool">
+    <title>Free Color Picker & HEX/RGB Converter | Online Web Design Tool</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #4361ee;
+            --primary-dark: #3a56d4;
+            --secondary: #3f37c9;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --gray: #6c757d;
+            --light-gray: #e9ecef;
+            --border-radius: 8px;
+            --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            color: var(--dark);
+            background-color: #f5f7ff;
+            padding: 0;
+            margin: 0;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px 0;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            color: var(--primary);
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            color: var(--gray);
+            max-width: 700px;
+            margin: 0 auto 20px;
+        }
+
+        /* Ad Containers */
+        .ad-container {
+            margin: 20px auto;
+            background-color: var(--light-gray);
+            border-radius: var(--border-radius);
+            padding: 15px;
+            text-align: center;
+            min-height: 90px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px dashed #ccc;
+        }
+
+        .ad-container.top-ad {
+            max-width: 728px;
+        }
+
+        .ad-container.side-ad {
+            width: 100%;
+            height: 600px;
+            margin: 0;
+        }
+
+        .main-content {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .color-picker-section {
+            flex: 1;
+            min-width: 300px;
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 20px;
+            box-shadow: var(--box-shadow);
+        }
+
+        .color-converter-section {
+            flex: 1;
+            min-width: 300px;
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 20px;
+            box-shadow: var(--box-shadow);
+        }
+
+        .section-title {
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Color Picker Styles */
+        .color-preview {
+            width: 100%;
+            height: 200px;
+            border-radius: var(--border-radius);
+            margin-bottom: 20px;
+            transition: var(--transition);
+            border: 1px solid var(--light-gray);
+        }
+
+        .color-sliders {
+            margin-bottom: 20px;
+        }
+
+        .slider-container {
+            margin-bottom: 15px;
+        }
+
+        .slider-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+
+        input[type="range"] {
+            width: 100%;
+            height: 8px;
+            border-radius: 4px;
+            background: var(--light-gray);
+            outline: none;
+            -webkit-appearance: none;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: var(--primary);
+            cursor: pointer;
+        }
+
+        /* Color Code Inputs */
+        .color-code-inputs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .input-group {
+            flex: 1;
+            min-width: 120px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid var(--light-gray);
+            border-radius: var(--border-radius);
+            font-family: 'Inter', sans-serif;
+            transition: var(--transition);
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(67, 97, 238, 0.2);
+        }
+
+        /* Buttons */
+        .buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            font-weight: 500;
+            transition: var(--transition);
+            font-family: 'Inter', sans-serif;
+            font-size: 0.95rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        button:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-1px);
+        }
+
+        button.secondary {
+            background-color: white;
+            color: var(--primary);
+            border: 1px solid var(--primary);
+        }
+
+        button.secondary:hover {
+            background-color: var(--light);
+        }
+
+        /* Mobile Ads */
+        .mobile-ad {
+            display: none;
+            margin: 20px auto;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px 0;
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 1200px) {
+            .main-content {
+                flex-direction: column;
+            }
+            
+            .ad-container.side-ad {
+                display: none;
+            }
+            
+            .mobile-ad {
+                display: block;
+            }
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .subtitle {
+                font-size: 1rem;
+            }
+            
+            .buttons {
+                flex-direction: column;
+            }
+            
+            button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Color Picker & HEX/RGB Converter</h1>
+            <p class="subtitle">Pick any color, convert between HEX and RGB codes, and get precise color values for your designs.</p>
+        </header>
+
+        <!-- Top Ad Banner -->
+        <div class="ad-container top-ad">
+            <!-- Google Adsense Ad Slot -->
+            <div id="top-banner-ad">
+                <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-EXAMPLE"></script>
+                <!-- ColorPicker_Top_Banner -->
+                <ins class="adsbygoogle"
+                    style="display:block"
+                    data-ad-client="ca-pub-EXAMPLE"
+                    data-ad-slot="1234567890"
+                    data-ad-format="auto"
+                    data-full-width-responsive="true"></ins>
+                <script>
+                    (adsbygoogle = window.adsbygoogle || []).push({});
+                </script>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <!-- Color Picker Section -->
+            <div class="color-picker-section">
+                <h2 class="section-title">🎨 Color Picker</h2>
+                
+                <div class="color-preview" id="color-preview"></div>
+                
+                <div class="color-sliders">
+                    <div class="slider-container">
+                        <div class="slider-label">
+                            <span>Red</span>
+                            <span id="red-value">0</span>
+                        </div>
+                        <input type="range" min="0" max="255" value="0" id="red-slider">
+                    </div>
+                    
+                    <div class="slider-container">
+                        <div class="slider-label">
+                            <span>Green</span>
+                            <span id="green-value">0</span>
+                        </div>
+                        <input type="range" min="0" max="255" value="0" id="green-slider">
+                    </div>
+                    
+                    <div class="slider-container">
+                        <div class="slider-label">
+                            <span>Blue</span>
+                            <span id="blue-value">0</span>
+                        </div>
+                        <input type="range" min="0" max="255" value="0" id="blue-slider">
+                    </div>
+                </div>
+                
+                <div class="color-code-inputs">
+                    <div class="input-group">
+                        <label>HEX Code</label>
+                        <input type="text" id="hex-input" value="#000000" placeholder="#RRGGBB">
+                    </div>
+                    
+                    <div class="input-group">
+                        <label>RGB Code</label>
+                        <input type="text" id="rgb-input" value="rgb(0, 0, 0)" placeholder="rgb(R, G, B)">
+                    </div>
+                </div>
+                
+                <div class="buttons">
+                    <button id="copy-hex">📋 Copy HEX</button>
+                    <button id="copy-rgb" class="secondary">📋 Copy RGB</button>
+                </div>
+            </div>
+
+            <!-- Mobile Ad (Hidden on Desktop) -->
+            <div class="mobile-ad ad-container">
+                <!-- Google Adsense Mobile Ad Slot -->
+                <div id="mobile-ad">
+                    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-EXAMPLE"></script>
+                    <!-- ColorPicker_Mobile_Banner -->
+                    <ins class="adsbygoogle"
+                        style="display:block"
+                        data-ad-client="ca-pub-EXAMPLE"
+                        data-ad-slot="0987654321"
+                        data-ad-format="auto"
+                        data-full-width-responsive="true"></ins>
+                    <script>
+                        (adsbygoogle = window.adsbygoogle || []).push({});
+                    </script>
+                </div>
+            </div>
+
+            <!-- Side Ad (Hidden on Mobile) -->
+            <div class="ad-container side-ad">
+                <!-- Google Adsense Sidebar Ad Slot -->
+                <div id="side-ad">
+                    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-EXAMPLE"></script>
+                    <!-- ColorPicker_Sidebar -->
+                    <ins class="adsbygoogle"
+                        style="display:block"
+                        data-ad-client="ca-pub-EXAMPLE"
+                        data-ad-slot="2468013579"
+                        data-ad-format="auto"
+                        data-full-width-responsive="true"></ins>
+                    <script>
+                        (adsbygoogle = window.adsbygoogle || []).push({});
+                    </script>
+                </div>
+            </div>
+
+            <!-- HEX/RGB Converter Section -->
+            <div class="color-converter-section">
+                <h2 class="section-title">🔄 HEX ↔ RGB Converter</h2>
+                
+                <div class="input-group">
+                    <label>Enter HEX Code (#RRGGBB)</label>
+                    <input type="text" id="hex-convert-input" placeholder="#FFFFFF" value="#4361ee">
+                </div>
+                
+                <div class="buttons">
+                    <button id="convert-to-rgb">Convert to RGB</button>
+                </div>
+                
+                <div class="input-group" style="margin-top: 20px;">
+                    <label>Enter RGB Code (R, G, B)</label>
+                    <input type="text" id="rgb-convert-input" placeholder="255, 255, 255" value="67, 97, 238">
+                </div>
+                
+                <div class="buttons">
+                    <button id="convert-to-hex">Convert to HEX</button>
+                </div>
+                
+                <div id="conversion-result" style="margin-top: 20px; padding: 10px; background: var(--light-gray); border-radius: var(--border-radius); display: none;">
+                    <strong>Result:</strong> <span id="result-text"></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bottom Ad Banner -->
+        <div class="ad-container top-ad" style="margin-top: 40px;">
+            <!-- Google Adsense Bottom Ad Slot -->
+            <div id="bottom-banner-ad">
+                <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-EXAMPLE"></script>
+                <!-- ColorPicker_Bottom_Banner -->
+                <ins class="adsbygoogle"
+                    style="display:block"
+                    data-ad-client="ca-pub-EXAMPLE"
+                    data-ad-slot="1357924680"
+                    data-ad-format="auto"
+                    data-full-width-responsive="true"></ins>
+                <script>
+                    (adsbygoogle = window.adsbygoogle || []).push({});
+                </script>
+            </div>
+        </div>
+
+        <footer>
+            <p>© <span id="year"></span> Color Picker & HEX/RGB Converter - Free Online Design Tool</p>
+            <p>All processing happens in your browser. No data is sent to servers.</p>
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set current year in footer
+            document.getElementById('year').textContent = new Date().getFullYear();
+            
+            // DOM Elements
+            const colorPreview = document.getElementById('color-preview');
+            const redSlider = document.getElementById('red-slider');
+            const greenSlider = document.getElementById('green-slider');
+            const blueSlider = document.getElementById('blue-slider');
+            const redValue = document.getElementById('red-value');
+            const greenValue = document.getElementById('green-value');
+            const blueValue = document.getElementById('blue-value');
+            const hexInput = document.getElementById('hex-input');
+            const rgbInput = document.getElementById('rgb-input');
+            const copyHexBtn = document.getElementById('copy-hex');
+            const copyRgbBtn = document.getElementById('copy-rgb');
+            const hexConvertInput = document.getElementById('hex-convert-input');
+            const rgbConvertInput = document.getElementById('rgb-convert-input');
+            const convertToRgbBtn = document.getElementById('convert-to-rgb');
+            const convertToHexBtn = document.getElementById('convert-to-hex');
+            const conversionResult = document.getElementById('conversion-result');
+            const resultText = document.getElementById('result-text');
+
+            // Initialize with default color (#4361ee)
+            updateColor(67, 97, 238);
+
+            // Update color preview and inputs when sliders change
+            [redSlider, greenSlider, blueSlider].forEach(slider => {
+                slider.addEventListener('input', function() {
+                    const r = parseInt(redSlider.value);
+                    const g = parseInt(greenSlider.value);
+                    const b = parseInt(blueSlider.value);
+                    updateColor(r, g, b);
+                });
+            });
+
+            // Update color when HEX input changes
+            hexInput.addEventListener('change', function() {
+                const hex = hexInput.value.trim();
+                if (/^#[0-9A-F]{6}$/i.test(hex)) {
+                    const r = parseInt(hex.substr(1, 2), 16);
+                    const g = parseInt(hex.substr(3, 2), 16);
+                    const b = parseInt(hex.substr(5, 2), 16);
+                    updateSliders(r, g, b);
+                    updateColor(r, g, b);
+                } else {
+                    alert("Invalid HEX format. Use #RRGGBB (e.g., #FF5733)");
+                }
+            });
+
+            // Update color when RGB input changes
+            rgbInput.addEventListener('change', function() {
+                const rgb = rgbInput.value.trim();
+                const match = rgb.match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/i);
+                if (match) {
+                    const r = parseInt(match[1]);
+                    const g = parseInt(match[2]);
+                    const b = parseInt(match[3]);
+                    if (r >= 0 && r <= 255 && g >= 0 && g <= 255 && b >= 0 && b <= 255) {
+                        updateSliders(r, g, b);
+                        updateColor(r, g, b);
+                    } else {
+                        alert("RGB values must be between 0 and 255");
+                    }
+                } else {
+                    alert("Invalid RGB format. Use rgb(R, G, B) (e.g., rgb(255, 87, 51))");
+                }
+            });
+
+            // Copy HEX to clipboard
+            copyHexBtn.addEventListener('click', function() {
+                hexInput.select();
+                document.execCommand('copy');
+                alert("HEX code copied to clipboard!");
+            });
+
+            // Copy RGB to clipboard
+            copyRgbBtn.addEventListener('click', function() {
+                rgbInput.select();
+                document.execCommand('copy');
+                alert("RGB code copied to clipboard!");
+            });
+
+            // Convert HEX to RGB
+            convertToRgbBtn.addEventListener('click', function() {
+                const hex = hexConvertInput.value.trim();
+                if (/^#[0-9A-F]{6}$/i.test(hex)) {
+                    const r = parseInt(hex.substr(1, 2), 16);
+                    const g = parseInt(hex.substr(3, 2), 16);
+                    const b = parseInt(hex.substr(5, 2), 16);
+                    resultText.textContent = `RGB: ${r}, ${g}, ${b}`;
+                    conversionResult.style.display = 'block';
+                } else {
+                    alert("Invalid HEX format. Use #RRGGBB (e.g., #FF5733)");
+                }
+            });
+
+            // Convert RGB to HEX
+            convertToHexBtn.addEventListener('click', function() {
+                const rgb = rgbConvertInput.value.trim();
+                const match = rgb.match(/^(\d+),\s*(\d+),\s*(\d+)$/);
+                if (match) {
+                    const r = parseInt(match[1]);
+                    const g = parseInt(match[2]);
+                    const b = parseInt(match[3]);
+                    if (r >= 0 && r <= 255 && g >= 0 && g <= 255 && b >= 0 && b <= 255) {
+                        const hex = `#${((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1).toUpperCase()}`;
+                        resultText.textContent = `HEX: ${hex}`;
+                        conversionResult.style.display = 'block';
+                    } else {
+                        alert("RGB values must be between 0 and 255");
+                    }
+                } else {
+                    alert("Invalid RGB format. Use R, G, B (e.g., 255, 87, 51)");
+                }
+            });
+
+            // Helper functions
+            function updateColor(r, g, b) {
+                colorPreview.style.backgroundColor = `rgb(${r}, ${g}, ${b})`;
+                hexInput.value = `#${((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1).toUpperCase()}`;
+                rgbInput.value = `rgb(${r}, ${g}, ${b})`;
+                redValue.textContent = r;
+                greenValue.textContent = g;
+                blueValue.textContent = b;
+            }
+
+            function updateSliders(r, g, b) {
+                redSlider.value = r;
+                greenSlider.value = g;
+                blueSlider.value = b;
+            }
+        });
+    </script>
+</body>
+</html>
