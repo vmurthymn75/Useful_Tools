@@ -1,0 +1,1033 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DNS Lookup Tool – Fast & Accurate DNS Record Checker for IT Admins</title>
+    <meta name="description" content="Use this advanced DNS Lookup Tool to retrieve A, MX, CNAME, TXT, and other DNS records instantly. Built for IT professionals, network engineers, and web developers.">
+    <meta name="keywords" content="DNS Lookup, DNS Records Checker, A record, MX record, IT Tools, Network Utilities, Domain Tools">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #4a6fa5;
+            --secondary-color: #6b8cae;
+            --text-color: #333;
+            --bg-color: #f5f7fa;
+            --card-bg: #fff;
+            --border-color: #e1e4e8;
+            --success-color: #28a745;
+            --error-color: #dc3545;
+            --warning-color: #ffc107;
+            --info-color: #17a2b8;
+            --transition: all 0.3s ease;
+        }
+
+        [data-theme="dark"] {
+            --primary-color: #5d8bd8;
+            --secondary-color: #7fa3d3;
+            --text-color: #f0f0f0;
+            --bg-color: #1a1a1a;
+            --card-bg: #2d2d2d;
+            --border-color: #444;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--bg-color);
+            transition: var(--transition);
+            padding-top: 70px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background-color: var(--primary-color);
+            color: white;
+            padding: 15px 0;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            transition: var(--transition);
+        }
+
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .logo i {
+            font-size: 1.8rem;
+        }
+
+        .theme-toggle {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+            padding: 5px;
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+        }
+
+        .theme-toggle:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .ad-top-banner {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            padding: 10px;
+            margin: 20px 0;
+            text-align: center;
+            border-radius: 5px;
+            min-height: 90px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-color);
+            transition: var(--transition);
+        }
+
+        .ad-top-banner.mobile {
+            min-height: 50px;
+        }
+
+        main {
+            padding: 20px 0 40px;
+        }
+
+        h1 {
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            text-align: center;
+            font-size: 2.2rem;
+        }
+
+        h2 {
+            color: var(--secondary-color);
+            margin: 30px 0 15px;
+            font-size: 1.5rem;
+        }
+
+        .lookup-card {
+            background-color: var(--card-bg);
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            padding: 25px;
+            margin-bottom: 30px;
+            transition: var(--transition);
+            border: 1px solid var(--border-color);
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--text-color);
+        }
+
+        .input-container {
+            display: flex;
+            gap: 10px;
+        }
+
+        input {
+            flex: 1;
+            padding: 12px 15px;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            font-size: 1rem;
+            transition: var(--transition);
+            background-color: var(--card-bg);
+            color: var(--text-color);
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(74, 111, 165, 0.2);
+        }
+
+        button {
+            padding: 12px 20px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        button:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-2px);
+        }
+
+        button:disabled {
+            background-color: #94a3b8;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .error-message {
+            color: var(--error-color);
+            font-size: 0.85rem;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .loading-spinner {
+            display: none;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .result-card {
+            background-color: var(--card-bg);
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            transition: var(--transition);
+            border: 1px solid var(--border-color);
+            position: relative;
+        }
+
+        .result-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .result-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+            color: var(--secondary-color);
+            font-weight: 600;
+        }
+
+        .record-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+            font-size: 0.9rem;
+        }
+
+        .record-table th {
+            text-align: left;
+            padding: 8px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .record-table td {
+            padding: 8px;
+            border-bottom: 1px solid var(--border-color);
+            word-break: break-all;
+        }
+
+        .record-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .copy-btn {
+            background: none;
+            border: none;
+            color: var(--text-color);
+            cursor: pointer;
+            opacity: 0.7;
+            transition: var(--transition);
+            padding: 5px;
+            border-radius: 50%;
+            margin-left: 5px;
+        }
+
+        .copy-btn:hover {
+            opacity: 1;
+            background-color: rgba(0, 0, 0, 0.1);
+        }
+
+        .copy-btn i {
+            font-size: 0.9rem;
+        }
+
+        .no-records {
+            color: var(--text-color);
+            opacity: 0.7;
+            font-style: italic;
+        }
+
+        .share-section {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .share-btn {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            padding: 8px 15px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .share-btn:hover {
+            background-color: var(--secondary-color);
+        }
+
+        .share-btn i {
+            font-size: 1rem;
+        }
+
+        .ad-sidebar {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            padding: 10px;
+            margin: 20px 0;
+            text-align: center;
+            border-radius: 5px;
+            min-height: 250px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-color);
+            transition: var(--transition);
+        }
+
+        .faq-section {
+            margin-top: 40px;
+        }
+
+        .faq-item {
+            margin-bottom: 15px;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            overflow: hidden;
+            transition: var(--transition);
+        }
+
+        .faq-question {
+            padding: 15px;
+            background-color: var(--card-bg);
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+        }
+
+        .faq-question:hover {
+            background-color: rgba(0, 0, 0, 0.05);
+        }
+
+        .faq-answer {
+            padding: 0 15px;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+            background-color: var(--card-bg);
+        }
+
+        .faq-answer.show {
+            padding: 15px;
+            max-height: 500px;
+        }
+
+        footer {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 30px 0;
+            margin-top: 50px;
+        }
+
+        .footer-content {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+
+        .footer-section {
+            flex: 1;
+            min-width: 200px;
+            margin-bottom: 20px;
+        }
+
+        .footer-section h3 {
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 8px;
+        }
+
+        .footer-section ul li a {
+            color: white;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .footer-section ul li a:hover {
+            text-decoration: underline;
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 20px;
+            margin-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        @media (max-width: 768px) {
+            .results-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .ad-top-banner.desktop {
+                display: none;
+            }
+
+            .ad-top-banner.mobile {
+                display: flex;
+            }
+
+            .input-container {
+                flex-direction: column;
+            }
+
+            button {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .footer-section {
+                min-width: 100%;
+            }
+        }
+
+        @media (min-width: 769px) {
+            .ad-top-banner.desktop {
+                display: flex;
+            }
+
+            .ad-top-banner.mobile {
+                display: none;
+            }
+
+            .main-content {
+                display: grid;
+                grid-template-columns: 1fr 300px;
+                gap: 30px;
+            }
+
+            .ad-sidebar {
+                position: sticky;
+                top: 90px;
+                align-self: start;
+            }
+        }
+
+        /* Animation classes */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease forwards;
+        }
+
+        .delay-1 { animation-delay: 0.1s; }
+        .delay-2 { animation-delay: 0.2s; }
+        .delay-3 { animation-delay: 0.3s; }
+        .delay-4 { animation-delay: 0.4s; }
+        .delay-5 { animation-delay: 0.5s; }
+    </style>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "DNS Lookup Tool",
+        "description": "Advanced DNS lookup tool to retrieve A, MX, CNAME, TXT, and other DNS records instantly.",
+        "applicationCategory": "NetworkUtility",
+        "operatingSystem": "Web Browser",
+        "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD"
+        }
+    }
+    </script>
+</head>
+<body>
+    <header>
+        <div class="container header-container">
+            <div class="logo">
+                <i class="fas fa-network-wired" aria-hidden="true"></i>
+                <span>Advanced DNS Lookup</span>
+            </div>
+            <button class="theme-toggle" aria-label="Toggle dark mode">
+                <i class="fas fa-moon"></i>
+            </button>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="ad-top-banner desktop" aria-label="Advertisement">
+            <!-- Google AdSense will be injected here -->
+            Advertisement (728x90)
+        </div>
+        <div class="ad-top-banner mobile" aria-label="Advertisement">
+            <!-- Google AdSense will be injected here -->
+            Advertisement (320x50)
+        </div>
+
+        <main>
+            <h1>Advanced DNS Lookup Tool</h1>
+            <p>Retrieve A, MX, CNAME, TXT, and other DNS records instantly with our advanced DNS lookup tool.</p>
+
+            <div class="main-content">
+                <div>
+                    <div class="lookup-card">
+                        <div class="input-group">
+                            <label for="domainInput">Domain Name</label>
+                            <div class="input-container">
+                                <input type="text" id="domainInput" placeholder="example.com">
+                                <button id="lookupBtn">
+                                    <span id="spinner" class="loading-spinner"></span>
+                                    Lookup
+                                </button>
+                            </div>
+                            <div class="error-message" id="domainError">Please enter a valid domain name (e.g., example.com)</div>
+                        </div>
+
+                        <div id="resultsContainer" style="display: none;">
+                            <div class="results-grid">
+                                <div class="result-card fade-in">
+                                    <div class="result-title">
+                                        <i class="fas fa-globe" aria-hidden="true"></i>
+                                        <span>A Records (IPv4)</span>
+                                    </div>
+                                    <div id="aRecords"></div>
+                                    <button class="copy-btn" aria-label="Copy all A records">
+                                        <i class="far fa-copy"></i>
+                                    </button>
+                                </div>
+                                <div class="result-card fade-in delay-1">
+                                    <div class="result-title">
+                                        <i class="fas fa-network-wired" aria-hidden="true"></i>
+                                        <span>AAAA Records (IPv6)</span>
+                                    </div>
+                                    <div id="aaaaRecords"></div>
+                                    <button class="copy-btn" aria-label="Copy all AAAA records">
+                                        <i class="far fa-copy"></i>
+                                    </button>
+                                </div>
+                                <div class="result-card fade-in delay-2">
+                                    <div class="result-title">
+                                        <i class="fas fa-envelope" aria-hidden="true"></i>
+                                        <span>MX Records</span>
+                                    </div>
+                                    <div id="mxRecords"></div>
+                                    <button class="copy-btn" aria-label="Copy all MX records">
+                                        <i class="far fa-copy"></i>
+                                    </button>
+                                </div>
+                                <div class="result-card fade-in delay-3">
+                                    <div class="result-title">
+                                        <i class="fas fa-link" aria-hidden="true"></i>
+                                        <span>CNAME Records</span>
+                                    </div>
+                                    <div id="cnameRecords"></div>
+                                    <button class="copy-btn" aria-label="Copy all CNAME records">
+                                        <i class="far fa-copy"></i>
+                                    </button>
+                                </div>
+                                <div class="result-card fade-in delay-4">
+                                    <div class="result-title">
+                                        <i class="fas fa-server" aria-hidden="true"></i>
+                                        <span>NS Records</span>
+                                    </div>
+                                    <div id="nsRecords"></div>
+                                    <button class="copy-btn" aria-label="Copy all NS records">
+                                        <i class="far fa-copy"></i>
+                                    </button>
+                                </div>
+                                <div class="result-card fade-in delay-5">
+                                    <div class="result-title">
+                                        <i class="fas fa-file-alt" aria-hidden="true"></i>
+                                        <span>TXT Records</span>
+                                    </div>
+                                    <div id="txtRecords"></div>
+                                    <button class="copy-btn" aria-label="Copy all TXT records">
+                                        <i class="far fa-copy"></i>
+                                    </button>
+                                </div>
+                                <div class="result-card">
+                                    <div class="result-title">
+                                        <i class="fas fa-cog" aria-hidden="true"></i>
+                                        <span>SOA Record</span>
+                                    </div>
+                                    <div id="soaRecord"></div>
+                                    <button class="copy-btn" aria-label="Copy SOA record">
+                                        <i class="far fa-copy"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="share-section">
+                                <button class="share-btn" id="shareTwitter">
+                                    <i class="fab fa-twitter"></i> Twitter
+                                </button>
+                                <button class="share-btn" id="shareLinkedIn">
+                                    <i class="fab fa-linkedin"></i> LinkedIn
+                                </button>
+                                <button class="share-btn" id="copyLink">
+                                    <i class="fas fa-link"></i> Copy Link
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="faq-section">
+                        <h2>Frequently Asked Questions</h2>
+                        <div class="faq-item">
+                            <div class="faq-question">
+                                <span>What is DNS and how does it work?</span>
+                                <i class="fas fa-chevron-down"></i>
+                            </div>
+                            <div class="faq-answer">
+                                <p>DNS (Domain Name System) is the phonebook of the internet. It translates human-readable domain names (like example.com) into machine-readable IP addresses (like 192.0.2.1). When you visit a website, your computer queries DNS servers to find the IP address associated with that domain.</p>
+                            </div>
+                        </div>
+                        <div class="faq-item">
+                            <div class="faq-question">
+                                <span>Why are my DNS changes not showing up?</span>
+                                <i class="fas fa-chevron-down"></i>
+                            </div>
+                            <div class="faq-answer">
+                                <p>DNS changes can take time to propagate across the internet due to DNS caching. The time it takes depends on the TTL (Time To Live) value set in your DNS records. Typically, changes take anywhere from a few minutes to 48 hours to fully propagate.</p>
+                            </div>
+                        </div>
+                        <div class="faq-item">
+                            <div class="faq-question">
+                                <span>What's the difference between A and AAAA records?</span>
+                                <i class="fas fa-chevron-down"></i>
+                            </div>
+                            <div class="faq-answer">
+                                <p>A records map domain names to IPv4 addresses (32-bit addresses like 192.0.2.1), while AAAA records map domain names to IPv6 addresses (128-bit addresses like 2001:0db8:85a3::8a2e:0370:7334). IPv6 was introduced to address the limited availability of IPv4 addresses.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="ad-footer-block" aria-label="Advertisement">
+                        <!-- Google AdSense will be injected here -->
+                        Advertisement (336x280)
+                    </div>
+                </div>
+
+                <div class="ad-sidebar" aria-label="Advertisement">
+                    <!-- Google AdSense will be injected here -->
+                    Advertisement (300x250)
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="#">Home</a></li>
+                        <li><a href="#">About</a></li>
+                        <li><a href="#">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Resources</h3>
+                    <ul>
+                        <li><a href="#">DNS Basics</a></li>
+                        <li><a href="#">Record Types</a></li>
+                        <li><a href="#">Troubleshooting</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Legal</h3>
+                    <ul>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                        <li><a href="#">Cookie Policy</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2023 Advanced DNS Lookup Tool. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Theme toggle functionality
+        const themeToggle = document.querySelector('.theme-toggle');
+        const body = document.body;
+        const icon = themeToggle.querySelector('i');
+
+        // Check for saved theme preference or use preferred color scheme
+        const savedTheme = localStorage.getItem('theme') || 
+                         (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        
+        if (savedTheme === 'dark') {
+            body.setAttribute('data-theme', 'dark');
+            icon.classList.remove('fa-moon');
+            icon.classList.add('fa-sun');
+        }
+
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = body.getAttribute('data-theme');
+            
+            if (currentTheme === 'dark') {
+                body.removeAttribute('data-theme');
+                icon.classList.remove('fa-sun');
+                icon.classList.add('fa-moon');
+                localStorage.setItem('theme', 'light');
+            } else {
+                body.setAttribute('data-theme', 'dark');
+                icon.classList.remove('fa-moon');
+                icon.classList.add('fa-sun');
+                localStorage.setItem('theme', 'dark');
+            }
+        });
+
+        // Domain validation
+        function isValidDomain(domain) {
+            const domainRegex = /^(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?(?:\.[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?)+$)/i;
+            return domainRegex.test(domain);
+        }
+
+        // Show loading spinner
+        function showLoading(show) {
+            const spinner = document.getElementById('spinner');
+            const lookupBtn = document.getElementById('lookupBtn');
+            
+            if (show) {
+                spinner.style.display = 'block';
+                lookupBtn.disabled = true;
+            } else {
+                spinner.style.display = 'none';
+                lookupBtn.disabled = false;
+            }
+        }
+
+        // Create record table
+        function createRecordTable(records, type) {
+            if (!records || records.length === 0) {
+                return '<div class="no-records">No records found</div>';
+            }
+
+            let tableHtml = '<table class="record-table">';
+            
+            if (type === 'MX') {
+                tableHtml += `
+                    <thead>
+                        <tr>
+                            <th>Priority</th>
+                            <th>Mail Server</th>
+                            <th>TTL</th>
+                        </tr>
+                    </thead>
+                    <tbody>`;
+                
+                records.forEach(record => {
+                    tableHtml += `
+                        <tr>
+                            <td>${record.priority}</td>
+                            <td>${record.value} <button class="copy-btn" data-value="${record.value}" aria-label="Copy record">
+                                <i class="far fa-copy"></i>
+                            </button></td>
+                            <td>${record.TTL || 'N/A'}</td>
+                        </tr>`;
+                });
+            } else if (type === 'SOA') {
+                tableHtml += `
+                    <tbody>
+                        <tr>
+                            <td colspan="3"><pre>${JSON.stringify(records[0], null, 2)}</pre></td>
+                        </tr>
+                    </tbody>`;
+            } else {
+                tableHtml += `
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Value</th>
+                            <th>TTL</th>
+                        </tr>
+                    </thead>
+                    <tbody>`;
+                
+                records.forEach(record => {
+                    tableHtml += `
+                        <tr>
+                            <td>${record.name || 'N/A'}</td>
+                            <td>${record.value} <button class="copy-btn" data-value="${record.value}" aria-label="Copy record">
+                                <i class="far fa-copy"></i>
+                            </button></td>
+                            <td>${record.TTL || 'N/A'}</td>
+                        </tr>`;
+                });
+            }
+
+            tableHtml += '</tbody></table>';
+            return tableHtml;
+        }
+
+        // Fetch DNS records using Google's DNS-over-HTTPS API
+        async function fetchDNSRecords(domain) {
+            try {
+                showLoading(true);
+                
+                // Array of record types to fetch
+                const recordTypes = ['A', 'AAAA', 'MX', 'CNAME', 'TXT', 'NS', 'SOA'];
+                const results = {};
+                
+                // Fetch all record types in parallel
+                await Promise.all(recordTypes.map(async type => {
+                    try {
+                        const response = await fetch(`https://dns.google/resolve?name=${encodeURIComponent(domain)}&type=${type}`);
+                        const data = await response.json();
+                        
+                        if (data.Status === 0 && data.Answer) {
+                            results[type] = data.Answer.map(answer => {
+                                if (type === 'MX') {
+                                    const parts = answer.data.split(' ');
+                                    return {
+                                        priority: parts[0],
+                                        value: parts[1],
+                                        TTL: answer.TTL
+                                    };
+                                } else {
+                                    return {
+                                        name: answer.name,
+                                        value: answer.data,
+                                        TTL: answer.TTL
+                                    };
+                                }
+                            });
+                        } else {
+                            results[type] = [];
+                        }
+                    } catch (error) {
+                        console.error(`Error fetching ${type} records:`, error);
+                        results[type] = [];
+                    }
+                }));
+                
+                return results;
+            } catch (error) {
+                console.error('DNS lookup error:', error);
+                throw error;
+            } finally {
+                showLoading(false);
+            }
+        }
+
+        // Perform DNS lookup
+        async function performDNSLookup() {
+            const domainInput = document.getElementById('domainInput').value.trim();
+            const domainError = document.getElementById('domainError');
+            
+            // Reset error and hide previous results
+            domainError.style.display = 'none';
+            document.getElementById('resultsContainer').style.display = 'none';
+            
+            // Validate domain
+            if (!isValidDomain(domainInput)) {
+                domainError.style.display = 'block';
+                return;
+            }
+            
+            try {
+                const records = await fetchDNSRecords(domainInput);
+                
+                // Update UI with records
+                document.getElementById('aRecords').innerHTML = createRecordTable(records.A, 'A');
+                document.getElementById('aaaaRecords').innerHTML = createRecordTable(records.AAAA, 'AAAA');
+                document.getElementById('mxRecords').innerHTML = createRecordTable(records.MX, 'MX');
+                document.getElementById('cnameRecords').innerHTML = createRecordTable(records.CNAME, 'CNAME');
+                document.getElementById('txtRecords').innerHTML = createRecordTable(records.TXT, 'TXT');
+                document.getElementById('nsRecords').innerHTML = createRecordTable(records.NS, 'NS');
+                document.getElementById('soaRecord').innerHTML = createRecordTable(records.SOA, 'SOA');
+                
+                // Show results container
+                document.getElementById('resultsContainer').style.display = 'block';
+                
+                // Update URL for sharing
+                updateShareURL(domainInput);
+            } catch (error) {
+                alert(`Error: ${error.message}`);
+            }
+        }
+
+        // Copy to clipboard functionality
+        function setupCopyButtons() {
+            document.addEventListener('click', function(e) {
+                if (e.target.closest('.copy-btn')) {
+                    const btn = e.target.closest('.copy-btn');
+                    const value = btn.getAttribute('data-value') || 
+                                 btn.parentElement.querySelector('.record-table')?.textContent.trim();
+                    
+                    if (value) {
+                        navigator.clipboard.writeText(value).then(() => {
+                            const originalIcon = btn.innerHTML;
+                            btn.innerHTML = '<i class="fas fa-check"></i>';
+                            setTimeout(() => {
+                                btn.innerHTML = originalIcon;
+                            }, 2000);
+                        });
+                    }
+                }
+            });
+        }
+
+        // Update share URL
+        function updateShareURL(domain) {
+            const params = new URLSearchParams();
+            params.set('domain', domain);
+            
+            const newUrl = `${window.location.pathname}?${params.toString()}`;
+            window.history.pushState({}, '', newUrl);
+        }
+
+        // Share functionality
+        function setupShareButtons() {
+            document.getElementById('shareTwitter').addEventListener('click', () => {
+                const text = `Check out DNS records for ${document.getElementById('domainInput').value} using Advanced DNS Lookup Tool: ${window.location.href}`;
+                window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`, '_blank');
+            });
+
+            document.getElementById('shareLinkedIn').addEventListener('click', () => {
+                const url = `https://www.linkedin.com/shareArticle?mini=true&url=${encodeURIComponent(window.location.href)}&title=DNS Lookup Results&summary=Check out DNS records for ${document.getElementById('domainInput').value}`;
+                window.open(url, '_blank');
+            });
+
+            document.getElementById('copyLink').addEventListener('click', () => {
+                navigator.clipboard.writeText(window.location.href).then(() => {
+                    const btn = document.getElementById('copyLink');
+                    const originalText = btn.innerHTML;
+                    btn.innerHTML = '<i class="fas fa-check"></i> Copied!';
+                    setTimeout(() => {
+                        btn.innerHTML = originalText;
+                    }, 2000);
+                });
+            });
+        }
+
+        // FAQ toggle functionality
+        function setupFAQ() {
+            document.querySelectorAll('.faq-question').forEach(question => {
+                question.addEventListener('click', () => {
+                    const answer = question.nextElementSibling;
+                    const icon = question.querySelector('i');
+                    
+                    answer.classList.toggle('show');
+                    icon.classList.toggle('fa-chevron-down');
+                    icon.classList.toggle('fa-chevron-up');
+                });
+            });
+        }
+
+        // Load from URL parameters if present
+        function loadFromURL() {
+            const params = new URLSearchParams(window.location.search);
+            const domain = params.get('domain');
+            
+            if (domain) {
+                document.getElementById('domainInput').value = domain;
+                performDNSLookup();
+            }
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            setupCopyButtons();
+            setupShareButtons();
+            setupFAQ();
+            loadFromURL();
+            
+            // Set up lookup button
+            document.getElementById('lookupBtn').addEventListener('click', performDNSLookup);
+            
+            // Allow Enter key to trigger lookup
+            document.getElementById('domainInput').addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    performDNSLookup();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
