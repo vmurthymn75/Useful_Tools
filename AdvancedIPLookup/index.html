@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- SEO Meta Tags -->
+    <title>IP Info & Lookup Tool – Find IP Location, ISP, and ASN Details</title>
+    <meta name="description" content="Check your IP address, location, ISP, and ASN instantly using this smart IP Info Tool. SEO-optimized, fast, and accurate.">
+    <meta name="keywords" content="IP lookup, IP address, geolocation, ISP, ASN, IP info, network tools, IP location, free IP lookup">
+
+    <!-- Open Graph Tags -->
+    <meta property="og:title" content="Advanced IP Info & Lookup Tool">
+    <meta property="og:description" content="Instantly find IP address, location, ISP, and ASN details with this modern and accurate tool.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://yourdomain.com/ip-lookup">
+    <meta property="og:image" content="https://yourdomain.com/preview.png"> <!-- Replace with actual preview image URL -->
+
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "Advanced IP Info & Lookup Tool",
+      "url": "https://yourdomain.com/ip-lookup",
+      "description": "A web tool to lookup IP address geolocation, ISP, and ASN details.",
+      "applicationCategory": "Utilities",
+      "operatingSystem": "Any",
+      "browserRequirements": "Requires HTML5 and JavaScript support."
+    }
+    </script>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <!-- Custom Stylesheet -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-map-marker-alt"></i> Advanced IP Info & Lookup</h1>
+            <button id="theme-toggle" class="theme-toggle-btn" aria-label="Toggle dark/light mode">
+                <i class="fas fa-moon"></i>
+            </button>
+        </header>
+
+        <!-- AdSense Top Banner Placeholder -->
+        <div class="ad-container ad-top-banner">
+            <p>Top Banner Ad (728x90)</p>
+        </div>
+
+        <main>
+            <section class="lookup-section card">
+                <h2>Lookup IP Address</h2>
+                <div class="input-group">
+                    <input type="text" id="ip-input" placeholder="Enter IP (e.g., 8.8.8.8)" aria-label="IP Address or Domain Input">
+                    <button id="lookup-btn" class="btn"><i class="fas fa-search"></i> Lookup</button>
+                </div>
+                <p class="input-hint">Supports IP addresses</p>
+                <p id="error-message" class="error-message hidden"></p>
+            </section>
+
+            <!-- AdSense Middle Content Placeholder -->
+            <div class="ad-container ad-middle-content">
+                <p>Middle Content Ad (300x250)</p>
+            </div>
+
+            <section id="result-section" class="result-section card hidden">
+                <h2><i class="fas fa-info-circle"></i> IP Information</h2>
+                <div id="loading-spinner" class="loading-spinner hidden"></div>
+                <div id="ip-details" class="ip-details-grid">
+                    <!-- IP details will be populated here by JavaScript -->
+                </div>
+                <div class="result-actions">
+                    <button id="copy-ip-btn" class="btn"><i class="fas fa-copy"></i> Copy IP</button>
+                    <button id="share-result-btn" class="btn"><i class="fas fa-share-alt"></i> Share Result</button>
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <!-- AdSense Footer Placeholder -->
+            <div class="ad-container ad-footer">
+                <p>Bottom Ad (336x280)</p>
+            </div>
+
+            <div class="footer-content">
+                <nav class="footer-nav">
+                    <a href="#" aria-label="Privacy Policy">Privacy Policy</a>
+                    <a href="#" aria-label="Terms of Service">Terms of Service</a>
+                </nav>
+                <div class="faq-section">
+                    <h3>Frequently Asked Questions</h3>
+                    <details>
+                        <summary>What is an IP Address?</summary>
+                        <p>An IP (Internet Protocol) address is a unique numerical label assigned to every device connected to a computer network that uses the Internet Protocol for communication.</p>
+                    </details>
+                    <details>
+                        <summary>What can this tool tell me?</summary>
+                        <p>This tool can provide geographical information (city, region, country), network details (ISP, organization, ASN), and other relevant data for any public IP address or domain name.</p>
+                    </details>
+                    <details>
+                        <summary>Is my IP address accurate?</summary>
+                        <p>IP geolocation data is generally accurate for country and region, but city-level accuracy can vary. It depends on the database used by the IP API provider.</p>
+                    </details>
+                </div>
+                <p>&copy; 2025 Advanced IP Info & Lookup Tool. All rights reserved.</p>
+            </div>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
