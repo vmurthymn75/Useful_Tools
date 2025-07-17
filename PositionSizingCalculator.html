@@ -1,0 +1,1203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Position Sizing Calculator for Traders | Risk Management Tool</title>
+    <meta name="description" content="Use this advanced Position Sizing Calculator to determine the correct trade size based on your account risk. Perfect for day traders, swing traders, and investors.">
+    <meta property="og:title" content="Position Sizing Calculator for Traders">
+    <meta property="og:description" content="Quickly calculate optimal trade size using risk management principles. SEO-friendly, responsive, and ad-ready.">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="https://example.com/position-sizing-preview.jpg">
+    <meta property="og:url" content="https://example.com/position-sizing-calculator">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <style>
+        :root {
+            --primary-color: #4f46e5;
+            --secondary-color: #6366f1;
+            --text-color: #1e293b;
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --border-color: #e2e8f0;
+            --success-color: #10b981;
+            --error-color: #ef4444;
+            --warning-color: #f59e0b;
+            --info-color: #3b82f6;
+            --transition: all 0.3s ease;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --radius: 0.5rem;
+            --glass-bg: rgba(255, 255, 255, 0.8);
+            --glass-border: 1px solid rgba(255, 255, 255, 0.2);
+            --glass-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+            --glass-blur: blur(8px);
+        }
+
+        [data-theme="dark"] {
+            --primary-color: #6366f1;
+            --secondary-color: #818cf8;
+            --text-color: #f1f5f9;
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --border-color: #334155;
+            --glass-bg: rgba(30, 41, 59, 0.8);
+            --glass-border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--bg-color);
+            transition: var(--transition);
+            padding-top: 80px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background-color: var(--primary-color);
+            color: white;
+            padding: 15px 0;
+            box-shadow: var(--shadow);
+            z-index: 1000;
+            transition: var(--transition);
+        }
+
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .logo i {
+            font-size: 1.8rem;
+        }
+
+        .theme-toggle {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+            padding: 5px;
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+        }
+
+        .theme-toggle:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .ad-top-banner {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            padding: 10px;
+            margin: 20px 0;
+            text-align: center;
+            border-radius: var(--radius);
+            min-height: 90px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-color);
+            transition: var(--transition);
+        }
+
+        .ad-top-banner.mobile {
+            min-height: 50px;
+        }
+
+        main {
+            padding: 20px 0 40px;
+        }
+
+        h1 {
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            text-align: center;
+            font-size: 2.2rem;
+        }
+
+        h2 {
+            color: var(--secondary-color);
+            margin: 30px 0 15px;
+            font-size: 1.5rem;
+        }
+
+        .calculator-card {
+            background: var(--glass-bg);
+            border-radius: var(--radius);
+            box-shadow: var(--glass-shadow);
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur); /* For Safari support */
+            border: var(--glass-border);
+            padding: 25px;
+            margin-bottom: 30px;
+            transition: var(--transition);
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--text-color);
+        }
+
+        .input-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        input, select {
+            flex: 1;
+            padding: 12px 15px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius);
+            font-size: 1rem;
+            transition: var(--transition);
+            background-color: var(--card-bg);
+            color: var(--text-color);
+            /* Ensure inputs are legible on all devices */
+            -webkit-appearance: none; /* For iOS Safari, removes default styles */
+            -moz-appearance: none;    /* For Firefox, removes default styles */
+            appearance: none;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2);
+        }
+        /* Style for number input spin buttons */
+        input[type="number"]::-webkit-inner-spin-button,
+        input[type="number"]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        input[type="number"] {
+            -moz-appearance: textfield; /* Firefox */
+        }
+
+
+        .currency-symbol {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-color);
+        }
+
+        button {
+            padding: 12px 20px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: var(--radius);
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            /* Ensure buttons are easily clickable on touch devices */
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        button:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-2px);
+        }
+
+        button:disabled {
+            background-color: #94a3b8;
+            cursor: not-allowed;
+            transform: none;
+            opacity: 0.7; /* Indicate disabled state more clearly */
+        }
+
+        .error-message {
+            color: var(--error-color);
+            font-size: 0.85rem;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .loading-spinner {
+            display: none;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+        /* Fade-in animation for results */
+        .fade-in {
+            animation: fadeIn 0.5s forwards;
+            opacity: 0;
+        }
+        .delay-1 { animation-delay: 0.1s; }
+        .delay-2 { animation-delay: 0.2s; }
+
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+
+        .result-card {
+            background-color: var(--card-bg);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 20px;
+            transition: var(--transition);
+            border: 1px solid var(--border-color);
+            position: relative;
+        }
+
+        .result-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .result-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+            color: var(--secondary-color);
+            font-weight: 600;
+        }
+
+        .result-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .result-label {
+            font-size: 0.9rem;
+            color: var(--text-color);
+            opacity: 0.8;
+        }
+
+        .copy-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: none;
+            border: none;
+            color: var(--text-color);
+            cursor: pointer;
+            opacity: 0.7;
+            transition: var(--transition);
+            padding: 5px;
+            border-radius: 50%;
+            display: flex; /* Align icon vertically */
+            align-items: center;
+            justify-content: center;
+            /* Ensure copy button is easily tappable on touch devices */
+            min-width: 40px; /* Minimum touch target size */
+            min-height: 40px;
+        }
+
+        .copy-btn:hover {
+            opacity: 1;
+            background-color: rgba(0, 0, 0, 0.1);
+        }
+
+        .copy-btn i {
+            font-size: 1rem;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .reset-btn {
+            background-color: var(--card-bg);
+            color: var(--text-color);
+            border: 1px solid var(--border-color);
+        }
+
+        .reset-btn:hover {
+            background-color: var(--border-color);
+            transform: translateY(-2px);
+        }
+
+        .confirmation {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: var(--success-color);
+            color: white;
+            padding: 12px 20px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            display: none;
+            align-items: center;
+            gap: 10px;
+            z-index: 1000;
+            animation: fadeInOut 3s ease;
+            pointer-events: none; /* Allow clicks to pass through */
+        }
+
+        @keyframes fadeInOut {
+            0% { opacity: 0; transform: translateY(20px); }
+            10% { opacity: 1; transform: translateY(0); }
+            90% { opacity: 1; transform: translateY(0); }
+            100% { opacity: 0; transform: translateY(20px); }
+        }
+
+        .tooltip {
+            position: relative;
+            display: inline-block;
+            margin-left: 5px;
+            cursor: pointer;
+        }
+
+        .tooltip i {
+            color: var(--secondary-color);
+        }
+
+        .tooltip-text {
+            visibility: hidden;
+            width: 200px;
+            background-color: var(--card-bg);
+            color: var(--text-color);
+            text-align: center;
+            border-radius: var(--radius);
+            padding: 10px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0;
+            transition: opacity 0.3s;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+            font-weight: normal;
+            font-size: 0.9rem;
+            pointer-events: none; /* Tooltip should not block interactions */
+        }
+
+        .tooltip:hover .tooltip-text,
+        .tooltip:focus-within .tooltip-text { /* For keyboard accessibility */
+            visibility: visible;
+            opacity: 1;
+        }
+
+        /* FAQ Section styles */
+        .faq-section {
+            margin-top: 40px;
+        }
+
+        .faq-item {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius);
+            margin-bottom: 15px;
+            overflow: hidden;
+            transition: var(--transition);
+        }
+
+        .faq-question {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            cursor: pointer;
+            font-weight: 600;
+            color: var(--text-color);
+            background-color: var(--bg-color);
+            border-bottom: 1px solid var(--border-color);
+            transition: var(--transition);
+            /* Ensure enough padding for touch on smart TVs */
+            min-height: 50px;
+        }
+
+        .faq-question:hover {
+            background-color: var(--border-color);
+        }
+
+        .faq-question i {
+            transition: transform 0.3s ease;
+        }
+
+        .faq-item.active .faq-question i {
+            transform: rotate(180deg);
+        }
+
+        .faq-answer {
+            padding: 0 20px;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out, padding 0.3s ease-out;
+            color: var(--text-color);
+        }
+
+        .faq-item.active .faq-answer {
+            max-height: 200px; /* Adjust as needed for content height */
+            padding: 15px 20px;
+        }
+        .faq-answer p {
+            margin-bottom: 10px;
+            /* Last paragraph might not need bottom margin */
+            &:last-child {
+                margin-bottom: 0;
+            }
+        }
+
+
+        .ad-sidebar, .ad-footer-block {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            padding: 10px;
+            margin: 20px 0;
+            text-align: center;
+            border-radius: var(--radius);
+            min-height: 250px; /* Standard ad unit size */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-color);
+            transition: var(--transition);
+        }
+
+        footer {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 30px 0;
+            margin-top: 50px;
+        }
+
+        .footer-content {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+
+        .footer-section {
+            flex: 1;
+            min-width: 200px;
+            margin-bottom: 20px;
+        }
+
+        .footer-section h3 {
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 8px;
+        }
+
+        .footer-section ul li a {
+            color: white;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .footer-section ul li a:hover {
+            text-decoration: underline;
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 20px;
+            margin-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 768px) {
+            body {
+                padding-top: 60px; /* Adjust for smaller header on mobile */
+            }
+            header {
+                padding: 10px 0;
+            }
+            .logo {
+                font-size: 1.2rem;
+            }
+            .logo i {
+                font-size: 1.5rem;
+            }
+            h1 {
+                font-size: 1.8rem;
+            }
+            h2 {
+                font-size: 1.3rem;
+            }
+            .results-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .ad-top-banner.desktop {
+                display: none;
+            }
+
+            .ad-top-banner.mobile {
+                display: flex;
+            }
+
+            .input-container {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 5px; /* Reduce gap on smaller screens */
+            }
+            .input-container input, .input-container select {
+                width: 100%; /* Make inputs full width */
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
+
+            button {
+                width: 100%;
+                justify-content: center;
+            }
+            .copy-btn {
+                min-width: 36px;
+                min-height: 36px;
+            }
+
+            .footer-section {
+                min-width: 100%;
+                text-align: center;
+            }
+            .footer-section ul {
+                padding: 0; /* Remove default list padding */
+            }
+        }
+
+        @media (min-width: 769px) {
+            .ad-top-banner.desktop {
+                display: flex;
+            }
+
+            .ad-top-banner.mobile {
+                display: none;
+            }
+
+            .main-content {
+                display: grid;
+                grid-template-columns: 1fr 300px; /* Calculator and sidebar */
+                gap: 30px;
+            }
+
+            .ad-sidebar {
+                position: sticky;
+                top: 90px; /* Adjust for fixed header height */
+                align-self: start;
+            }
+        }
+
+        /* Smart TV Specific Adjustments (General, relies on media queries for larger screens) */
+        /* Smart TVs typically have large screens, so desktop styles often apply. */
+        /* Focus styles are crucial for navigation with remote controls. */
+        input:focus, select:focus, button:focus, .theme-toggle:focus, .copy-btn:focus, .faq-question:focus, a:focus {
+            outline: 3px solid var(--secondary-color); /* Highlight focused elements */
+            outline-offset: 2px;
+        }
+
+        /* Ensure sufficient contrast for text and interactive elements */
+        /* (Already handled by variables, but crucial for accessibility on TVs) */
+
+        /* Larger tap targets for touch/remote interaction */
+        /* Already addressed with min-width/min-height for buttons, but can be applied more broadly if needed. */
+        /* For Smart TVs, hover states might not be available, so focus states are more important. */
+
+    </style>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "Position Sizing Calculator",
+        "description": "Calculate optimal trade size based on risk management principles for traders and investors.",
+        "applicationCategory": "FinanceApplication",
+        "operatingSystem": "Web Browser",
+        "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD"
+        }
+    }
+    </script>
+</head>
+<body>
+    <header>
+        <div class="container header-container">
+            <div class="logo">
+                <i class="fas fa-calculator" aria-hidden="true"></i>
+                <span>Position Sizing Calculator</span>
+            </div>
+            <button class="theme-toggle" aria-label="Toggle dark mode">
+                <i class="fas fa-moon"></i>
+            </button>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="ad-top-banner desktop" aria-label="Advertisement">
+            Advertisement (728x90)
+        </div>
+        <div class="ad-top-banner mobile" aria-label="Advertisement">
+            Advertisement (320x50)
+        </div>
+
+        <main>
+            <h1>Position Sizing Calculator</h1>
+            <p>Calculate the optimal trade size based on your account risk parameters</p>
+
+            <div class="main-content">
+                <div>
+                    <div class="calculator-card">
+                        <div class="input-group">
+                            <label for="accountSize">
+                                Account Size
+                                <span class="tooltip">
+                                    <i class="fas fa-info-circle"></i>
+                                    <span class="tooltip-text">Total amount of capital in your trading account</span>
+                                </span>
+                            </label>
+                            <div class="input-container">
+                                <select id="currency" aria-label="Currency">
+                                    <option value="$" data-code="USD">USD ($)</option>
+                                    <option value="€" data-code="EUR">EUR (€)</option>
+                                    <option value="£" data-code="GBP">GBP (£)</option>
+                                    <option value="¥" data-code="JPY">JPY (¥)</option>
+                                    <option value="A$" data-code="AUD">AUD (A$)</option>
+                                    <option value="C$" data-code="CAD">CAD (C$)</option>
+                                    <option value="CHF" data-code="CHF">CHF (CHF)</option>
+                                    <option value="C¥" data-code="CNY">CNY (C¥)</option>
+                                    <option value="kr" data-code="SEK">SEK (kr)</option>
+                                    <option value="NZ$" data-code="NZD">NZD (NZ$)</option>
+                                    <option value="R" data-code="ZAR">ZAR (R)</option>
+                                    <option value="₺" data-code="TRY">TRY (₺)</option>
+                                    <option value="₹" data-code="INR" selected>INR (₹)</option>
+                                    <option value="₽" data-code="RUB">RUB (₽)</option>
+                                    <option value="₩" data-code="KRW">KRW (₩)</option>
+                                </select>
+                                <input type="number" id="accountSize" placeholder="10000" min="1" step="0.01" inputmode="decimal">
+                            </div>
+                            <div class="error-message" id="accountSizeError">Please enter a valid account size (minimum 1).</div>
+                        </div>
+
+                        <div class="input-group">
+                            <label for="riskPercent">
+                                Risk Percentage
+                                <span class="tooltip">
+                                    <i class="fas fa-info-circle"></i>
+                                    <span class="tooltip-text">Percentage of your account you're willing to risk on this trade (e.g., 1-2%)</span>
+                                </span>
+                            </label>
+                            <div class="input-container">
+                                <input type="number" id="riskPercent" placeholder="1" min="0.01" max="100" step="0.01" inputmode="decimal">
+                                <span class="currency-symbol">%</span>
+                            </div>
+                            <div class="error-message" id="riskPercentError">Please enter a valid risk percentage (0.01-100).</div>
+                        </div>
+
+                        <div class="input-group">
+                            <label for="entryPrice">
+                                Entry Price
+                                <span class="tooltip">
+                                    <i class="fas fa-info-circle"></i>
+                                    <span class="tooltip-text">Price at which you plan to enter the trade</span>
+                                </span>
+                            </label>
+                            <div class="input-container">
+                                <span class="currency-symbol" id="entryPriceSymbol">₹</span>
+                                <input type="number" id="entryPrice" placeholder="50.25" min="0.0001" step="0.0001" inputmode="decimal">
+                            </div>
+                            <div class="error-message" id="entryPriceError">Please enter a valid entry price (greater than 0).</div>
+                        </div>
+
+                        <div class="input-group">
+                            <label for="stopLossPrice">
+                                Stop Loss Price
+                                <span class="tooltip">
+                                    <i class="fas fa-info-circle"></i>
+                                    <span class="tooltip-text">Price at which you'll exit the trade to limit losses</span>
+                                </span>
+                            </label>
+                            <div class="input-container">
+                                <span class="currency-symbol" id="stopLossSymbol">₹</span>
+                                <input type="number" id="stopLossPrice" placeholder="48.75" min="0.0001" step="0.0001" inputmode="decimal">
+                            </div>
+                            <div class="error-message" id="stopLossError">Please enter a valid stop loss price.</div>
+                        </div>
+
+                        <div class="button-group">
+                            <button id="calculateBtn">
+                                <i class="fas fa-calculator"></i> Calculate
+                            </button>
+                            <button class="reset-btn" id="resetBtn">
+                                <i class="fas fa-redo"></i> Reset
+                            </button>
+                        </div>
+
+                        <div id="resultsContainer" style="display: none;">
+                            <div class="results-grid">
+                                <div class="result-card fade-in">
+                                    <div class="result-title">
+                                        <i class="fas fa-exclamation-triangle"></i>
+                                        <span>Amount at Risk</span>
+                                    </div>
+                                    <div class="result-value" id="amountAtRisk">-</div>
+                                    <div class="result-label">This is what you're risking on the trade</div>
+                                    <button class="copy-btn" aria-label="Copy amount at risk">
+                                        <i class="far fa-copy"></i>
+                                    </button>
+                                </div>
+                                <div class="result-card fade-in delay-1">
+                                    <div class="result-title">
+                                        <i class="fas fa-chart-line"></i>
+                                        <span>Position Size</span>
+                                    </div>
+                                    <div class="result-value" id="positionSize">-</div>
+                                    <div class="result-label">Number of shares/units to buy</div>
+                                    <button class="copy-btn" aria-label="Copy position size">
+                                        <i class="far fa-copy"></i>
+                                    </button>
+                                </div>
+                                <div class="result-card fade-in delay-2">
+                                    <div class="result-title">
+                                        <i class="fas fa-dollar-sign"></i>
+                                        <span>Position Value</span>
+                                    </div>
+                                    <div class="result-value" id="positionValue">-</div>
+                                    <div class="result-label">Total value of the position</div>
+                                    <button class="copy-btn" aria-label="Copy position value">
+                                        <i class="far fa-copy"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="faq-section">
+                        <h2>Frequently Asked Questions</h2>
+                        <div class="faq-item" tabindex="0" role="button" aria-expanded="false" aria-controls="faq-answer-1">
+                            <div class="faq-question">
+                                <span>What is position sizing in trading?</span>
+                                <i class="fas fa-chevron-down"></i>
+                            </div>
+                            <div class="faq-answer" id="faq-answer-1">
+                                <p>Position sizing is a risk management technique that determines how much capital to allocate to a single trade based on your account size and risk tolerance. It helps traders limit losses and maximize returns by ensuring no single trade can significantly impact their portfolio.</p>
+                            </div>
+                        </div>
+                        <div class="faq-item" tabindex="0" role="button" aria-expanded="false" aria-controls="faq-answer-2">
+                            <div class="faq-question">
+                                <span>What risk percentage should I use?</span>
+                                <i class="fas fa-chevron-down"></i>
+                            </div>
+                            <div class="faq-answer" id="faq-answer-2">
+                                <p>Most professional traders recommend risking 1-2% of your account per trade. This allows you to withstand a series of losses without significantly damaging your account. More conservative traders may use 0.5%, while aggressive traders might go up to 3-5% (not recommended for beginners).</p>
+                            </div>
+                        </div>
+                        <div class="faq-item" tabindex="0" role="button" aria-expanded="false" aria-controls="faq-answer-3">
+                            <div class="faq-question">
+                                <span>Why is position sizing important?</span>
+                                <i class="fas fa-chevron-down"></i>
+                            </div>
+                            <div class="faq-answer" id="faq-answer-3">
+                                <p>Proper position sizing helps you: 1) Limit losses on unsuccessful trades, 2) Maximize gains on winning trades, 3) Maintain emotional control by preventing any single trade from having too much impact, and 4) Stay in the game long enough to benefit from your trading strategy.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="ad-footer-block" aria-label="Advertisement">
+                        Advertisement (336x280)
+                    </div>
+                </div>
+
+                <div class="ad-sidebar" aria-label="Advertisement">
+                    Advertisement (300x250)
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <div class="confirmation" id="confirmation">
+        <i class="fas fa-check-circle"></i>
+        <span>Copied to clipboard!</span>
+    </div>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="#">Home</a></li>
+                        <li><a href="#">About</a></li>
+                        <li><a href="#">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Resources</h3>
+                    <ul>
+                        <li><a href="#">Risk Management</a></li>
+                        <li><a href="#">Trading Basics</a></li>
+                        <li><a href="#">Position Sizing Guide</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Legal</h3>
+                    <ul>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                        <li><a href="#">Disclaimer</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2023 Position Sizing Calculator. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Theme toggle functionality
+        const themeToggle = document.querySelector('.theme-toggle');
+        const body = document.body;
+        const themeIcon = themeToggle.querySelector('i');
+
+        // Function to set theme
+        const setTheme = (theme) => {
+            if (theme === 'dark') {
+                body.setAttribute('data-theme', 'dark');
+                themeIcon.classList.remove('fa-moon');
+                themeIcon.classList.add('fa-sun');
+            } else {
+                body.removeAttribute('data-theme');
+                themeIcon.classList.remove('fa-sun');
+                themeIcon.classList.add('fa-moon');
+            }
+            localStorage.setItem('theme', theme);
+        };
+
+        // Check for saved theme preference or use preferred color scheme on load
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme) {
+                setTheme(savedTheme);
+            } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                setTheme('dark');
+            } else {
+                setTheme('light');
+            }
+        });
+
+        // Toggle theme on click
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = body.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+            setTheme(currentTheme === 'dark' ? 'light' : 'dark');
+        });
+
+        // Currency symbol update
+        const currencySelect = document.getElementById('currency');
+        const entryPriceSymbol = document.getElementById('entryPriceSymbol');
+        const stopLossSymbol = document.getElementById('stopLossSymbol');
+        const amountAtRiskDisplay = document.getElementById('amountAtRisk');
+        const positionValueDisplay = document.getElementById('positionValue');
+        const positionSizeDisplay = document.getElementById('positionSize'); // Added this
+
+        currencySelect.addEventListener('change', () => {
+            const symbol = currencySelect.value;
+            entryPriceSymbol.textContent = symbol;
+            stopLossSymbol.textContent = symbol;
+            // Update currency symbol in results if they are displayed
+            if (resultsContainer.style.display !== 'none') {
+                // Re-format existing results with new currency symbol
+                const currentAmountAtRisk = parseFloat(amountAtRiskDisplay.dataset.rawValue || '0');
+                const currentPositionValue = parseFloat(positionValueDisplay.dataset.rawValue || '0');
+                const currentPositionSize = parseFloat(positionSizeDisplay.dataset.rawValue || '0');
+
+                updateResults(
+                    currentAmountAtRisk,
+                    currentPositionSize, // Pass raw value here
+                    currentPositionValue,
+                    symbol
+                );
+            }
+        });
+
+        // Initialize currency symbol based on default selected value (INR) on load
+        document.addEventListener('DOMContentLoaded', () => {
+            const initialSymbol = currencySelect.value;
+            entryPriceSymbol.textContent = initialSymbol;
+            stopLossSymbol.textContent = initialSymbol;
+        });
+
+
+        // Input validation and calculation
+        const calculateBtn = document.getElementById('calculateBtn');
+        const resetBtn = document.getElementById('resetBtn');
+        const resultsContainer = document.getElementById('resultsContainer');
+        const confirmationMessage = document.getElementById('confirmation');
+
+        const accountSizeInput = document.getElementById('accountSize');
+        const riskPercentInput = document.getElementById('riskPercent');
+        const entryPriceInput = document.getElementById('entryPrice');
+        const stopLossPriceInput = document.getElementById('stopLossPrice');
+
+        // Store references to all error message elements
+        const errorMessages = {
+            accountSize: document.getElementById('accountSizeError'),
+            riskPercent: document.getElementById('riskPercentError'),
+            entryPrice: document.getElementById('entryPriceError'),
+            stopLossPrice: document.getElementById('stopLossError')
+        };
+
+        function showErrorMessage(element, message) {
+            element.textContent = message;
+            element.style.display = 'block';
+        }
+
+        function hideErrorMessage(element) {
+            element.style.display = 'none';
+        }
+
+        function validateInput(inputElement, errorElement, validationFn, errorMessage) {
+            const value = parseFloat(inputElement.value);
+            if (inputElement.value.trim() === '' || !validationFn(value)) {
+                showErrorMessage(errorElement, errorMessage);
+                inputElement.classList.add('input-error'); // Add a class for visual error
+                return false;
+            }
+            hideErrorMessage(errorElement);
+            inputElement.classList.remove('input-error');
+            return true;
+        }
+
+        function calculatePositionSize() {
+            let isValid = true;
+
+            isValid = validateInput(accountSizeInput, errorMessages.accountSize, val => val >= 1, 'Please enter a valid account size (minimum 1).') && isValid;
+            isValid = validateInput(riskPercentInput, errorMessages.riskPercent, val => val > 0 && val <= 100, 'Please enter a valid risk percentage (0.01-100).') && isValid;
+            isValid = validateInput(entryPriceInput, errorMessages.entryPrice, val => val > 0, 'Please enter a valid entry price (greater than 0).') && isValid;
+            isValid = validateInput(stopLossPriceInput, errorMessages.stopLossPrice, val => val > 0, 'Please enter a valid stop loss price (greater than 0).') && isValid;
+
+            // Specific validation: stop loss cannot be equal to entry price
+            const entryPrice = parseFloat(entryPriceInput.value);
+            const stopLossPrice = parseFloat(stopLossPriceInput.value);
+
+            if (entryPrice === stopLossPrice && isValid) { // Only show this if other validations pass
+                showErrorMessage(errorMessages.stopLossPrice, 'Stop Loss Price cannot be equal to Entry Price.');
+                stopLossPriceInput.classList.add('input-error');
+                isValid = false;
+            } else if (isValid) {
+                hideErrorMessage(errorMessages.stopLossPrice);
+                stopLossPriceInput.classList.remove('input-error');
+            }
+
+
+            if (!isValid) {
+                resultsContainer.style.display = 'none'; // Hide results if validation fails
+                return;
+            }
+
+            const accountSize = parseFloat(accountSizeInput.value);
+            const riskPercent = parseFloat(riskPercentInput.value);
+            // entryPrice and stopLossPrice are already parsed above
+
+            const riskAmount = accountSize * (riskPercent / 100);
+            const priceDifference = Math.abs(entryPrice - stopLossPrice);
+
+            if (priceDifference === 0) {
+                showErrorMessage(errorMessages.stopLossPrice, 'The difference between Entry Price and Stop Loss Price cannot be zero. Adjust prices.');
+                resultsContainer.style.display = 'none';
+                return;
+            } else {
+                hideErrorMessage(errorMessages.stopLossPrice);
+            }
+
+            const positionSize = riskAmount / priceDifference;
+            const positionValue = positionSize * entryPrice; // Corrected calculation for position value
+
+            const selectedCurrencySymbol = currencySelect.value;
+
+            // Store raw values in dataset for re-formatting on currency change
+            amountAtRiskDisplay.dataset.rawValue = riskAmount.toFixed(2);
+            positionSizeDisplay.dataset.rawValue = positionSize.toFixed(2);
+            positionValueDisplay.dataset.rawValue = positionValue.toFixed(2);
+
+            updateResults(riskAmount, positionSize, positionValue, selectedCurrencySymbol);
+
+            resultsContainer.style.display = 'block';
+            // Scroll to results on mobile after calculation
+            if (window.innerWidth <= 768) {
+                resultsContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        }
+
+        function updateResults(riskAmount, positionSize, positionValue, symbol) {
+            amountAtRiskDisplay.textContent = `${symbol} ${riskAmount.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+            positionSizeDisplay.textContent = positionSize.toLocaleString(undefined, { maximumFractionDigits: 0 }); // Whole units
+            positionValueDisplay.textContent = `${symbol} ${positionValue.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+        }
+
+
+        // Event listeners for calculation and reset
+        calculateBtn.addEventListener('click', calculatePositionSize);
+        resetBtn.addEventListener('click', () => {
+            accountSizeInput.value = '';
+            riskPercentInput.value = '';
+            entryPriceInput.value = '';
+            stopLossPriceInput.value = '';
+
+            // Hide results and all error messages
+            resultsContainer.style.display = 'none';
+            Object.values(errorMessages).forEach(el => hideErrorMessage(el));
+            [accountSizeInput, riskPercentInput, entryPriceInput, stopLossPriceInput].forEach(input => input.classList.remove('input-error'));
+
+            // Reset results display
+            amountAtRiskDisplay.textContent = '-';
+            positionSizeDisplay.textContent = '-';
+            positionValueDisplay.textContent = '-';
+
+            // Reset dataset values
+            amountAtRiskDisplay.dataset.rawValue = '';
+            positionSizeDisplay.dataset.rawValue = '';
+            positionValueDisplay.dataset.rawValue = '';
+
+            // Reset currency to default (INR)
+            currencySelect.value = '₹';
+            entryPriceSymbol.textContent = '₹';
+            stopLossSymbol.textContent = '₹';
+        });
+
+        // Copy functionality
+        document.querySelectorAll('.copy-btn').forEach(button => {
+            button.addEventListener('click', async (event) => {
+                const resultCard = event.target.closest('.result-card');
+                const valueElement = resultCard.querySelector('.result-value');
+                const textToCopy = valueElement.textContent;
+
+                try {
+                    await navigator.clipboard.writeText(textToCopy);
+                    confirmationMessage.querySelector('span').textContent = 'Copied to clipboard!';
+                    confirmationMessage.style.display = 'flex';
+                    setTimeout(() => {
+                        confirmationMessage.style.display = 'none';
+                    }, 3000);
+                } catch (err) {
+                    console.error('Failed to copy: ', err);
+                    confirmationMessage.querySelector('span').textContent = 'Failed to copy!';
+                    confirmationMessage.style.display = 'flex';
+                    confirmationMessage.style.backgroundColor = 'var(--error-color)'; // Indicate error
+                    setTimeout(() => {
+                        confirmationMessage.style.display = 'none';
+                        confirmationMessage.style.backgroundColor = 'var(--success-color)'; // Reset color
+                    }, 3000);
+                }
+            });
+        });
+
+        // FAQ accordion functionality
+        document.querySelectorAll('.faq-question').forEach(question => {
+            question.addEventListener('click', () => {
+                const faqItem = question.closest('.faq-item');
+                const answer = faqItem.querySelector('.faq-answer');
+                const isActive = faqItem.classList.contains('active');
+
+                // Close all other open FAQs
+                document.querySelectorAll('.faq-item.active').forEach(openItem => {
+                    if (openItem !== faqItem) {
+                        openItem.classList.remove('active');
+                        openItem.querySelector('.faq-answer').style.maxHeight = '0';
+                        openItem.setAttribute('aria-expanded', 'false');
+                    }
+                });
+
+                // Toggle current FAQ
+                if (isActive) {
+                    faqItem.classList.remove('active');
+                    answer.style.maxHeight = '0';
+                    faqItem.setAttribute('aria-expanded', 'false');
+                } else {
+                    faqItem.classList.add('active');
+                    answer.style.maxHeight = answer.scrollHeight + 'px'; // Set max-height to scrollHeight for smooth transition
+                    faqItem.setAttribute('aria-expanded', 'true');
+                }
+            });
+
+            // Make FAQ items keyboard accessible
+            const faqItem = question.closest('.faq-item');
+            faqItem.addEventListener('keydown', (event) => {
+                if (event.key === 'Enter' || event.key === ' ') {
+                    event.preventDefault(); // Prevent scrolling when pressing space
+                    question.click(); // Simulate a click
+                }
+            });
+        });
+
+        // Add a general check for input focus on mobile to adjust viewport if needed
+        // This can prevent the virtual keyboard from obscuring inputs
+        document.querySelectorAll('input[type="number"], input[type="text"]').forEach(input => {
+            input.addEventListener('focus', () => {
+                // Small delay to allow keyboard to appear
+                setTimeout(() => {
+                    if (window.innerWidth <= 768) { // Only for mobile devices
+                        input.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }
+                }, 300);
+            });
+        });
+
+    </script>
+</body>
+</html>
