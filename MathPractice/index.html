@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- SEO Meta Tags -->
+    <title>Fun Math Practice for Kids – Interactive Learning Game</title>
+    <meta name="description" content="Practice math with this fun, interactive game for kids! Solve addition, subtraction, multiplication, and division problems in a bright and friendly environment.">
+    <meta name="keywords" content="math game, kids math, educational game, math practice, addition, subtraction, multiplication, division">
+
+    <!-- JSON-LD Schema for EducationalApplication -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "EducationalApplication",
+      "name": "Fun Math Practice Tool for Kids",
+      "description": "An interactive web application for children to practice basic math skills including addition, subtraction, multiplication, and division.",
+      "applicationCategory": "Game",
+      "operatingSystem": "Any",
+      "educationalAlignment": [
+        {
+          "@type": "AlignmentObject",
+          "alignmentType": "educationalLevel",
+          "targetName": "Preschool"
+        },
+        {
+          "@type": "AlignmentObject",
+          "alignmentType": "educationalLevel",
+          "targetName": "Elementary School"
+        }
+      ],
+      "learningResourceType": "learning game"
+    }
+    </script>
+
+    <!-- Google Fonts & Font Awesome -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-container">
+        <header>
+            <h1><i class="fas fa-calculator"></i> Fun Math Practice</h1>
+            <div class="theme-switcher">
+                <i class="fas fa-sun"></i>
+                <label class="switch">
+                    <input type="checkbox" id="theme-toggle">
+                    <span class="slider round"></span>
+                </label>
+                <i class="fas fa-moon"></i>
+            </div>
+        </header>
+
+        <!-- Top Ad Banner -->
+        <div class="ad-container ad-top-banner">
+            <p>Top Ad Banner (728x90)</p>
+        </div>
+
+        <main>
+            <div class="game-area">
+                <section id="difficulty-selection">
+                    <h2>Choose Your Challenge!</h2>
+                    <div class="difficulty-buttons">
+                        <button class="btn difficulty-btn" data-level="easy">Easy <i class="fas fa-star"></i></button>
+                        <button class="btn difficulty-btn" data-level="medium">Medium <i class="fas fa-star"></i><i class="fas fa-star"></i></button>
+                        <button class="btn difficulty-btn" data-level="hard">Hard <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></button>
+                    </div>
+                </section>
+
+                <section id="game-section" class="hidden">
+                    <div id="question-container">
+                        <span id="num1"></span>
+                        <span id="operator"></span>
+                        <span id="num2"></span>
+                        <span>=</span>
+                        <input type="number" id="answer-input" placeholder="?" autofocus>
+                    </div>
+                    <button id="submit-btn" class="btn">Check Answer</button>
+                    <button id="next-btn" class="btn hidden">Next Question</button>
+                </section>
+
+                <div id="feedback-container">
+                    <p id="feedback-text"></p>
+                    <div id="star-container"></div>
+                </div>
+
+                <div id="score-container">
+                    <p>Score: <span id="correct-count">0</span> / <span id="total-count">0</span></p>
+                </div>
+
+                 <!-- Bottom Block Ad -->
+                 <div class="ad-container ad-footer">
+                    <p>Bottom Ad (300x250)</p>
+                </div>
+            </div>
+
+            <!-- Right Side Rectangle Ad -->
+            <aside class="ad-sidebar">
+                <div class="ad-container">
+                    <p>Sidebar Ad (300x250)</p>
+                </div>
+            </aside>
+        </main>
+    </div>
+
+    <audio id="correct-sound" src="correct.mp3"></audio>
+    <audio id="wrong-sound" src="wrong.mp3"></audio>
+
+    <script src="script.js"></script>
+</body>
+</html>
